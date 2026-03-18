@@ -414,6 +414,7 @@ def _load_commodity_summary_l3_filtered(
                         "sector":            r.get("sector", ""),
                         "tonnes":            0.0,
                         "transport_cost":    0.0,
+                        "freight_value":     0.0,
                         "co2":               0.0,
                         "trips":             0,
                         "od_pairs":          0,
@@ -421,6 +422,7 @@ def _load_commodity_summary_l3_filtered(
                 a = accum[key]
                 a["tonnes"]         += r.get("tonnes", 0.0)
                 a["transport_cost"] += r.get("trip_transport_costs", 0.0)
+                a["freight_value"]  += r.get("total_freight_value", 0.0)
                 a["co2"]            += r.get("co2_tn", 0.0)
                 a["trips"]          += int(r.get("trips_count", 0))
                 a["od_pairs"]       += 1
@@ -445,6 +447,152 @@ def _cached_commodity_summary(
 ) -> tuple[list[dict], str | None]:
     """Cached wrapper for _load_commodity_summary_l3_filtered."""
     return _load_commodity_summary_l3_filtered(
+        industry_filter_frozen,
+        commodity_filter_frozen,
+        orig_lga=orig_lga,
+        orig_state_arg=orig_state_arg,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Commodity Filter Insights — corridor-level loader (per-commodity top-10 OD)
+# ---------------------------------------------------------------------------
+
+def _render_corridor_bar(corridors: list[dict], comm_key: str) -> None:
+    """Render a Top-10 OD corridor horizontal bar chart for one commodity."""
+    if not corridors:
+        st.info(f"No corridor data for {_fmt_commodity(comm_key)}.", icon="ℹ️")
+        return
+    _labels = [f"{r['orig_name']} \u2192 {r['dest_name']}" for r in corridors]
+    _colors = [STATE_COLORS.get(r["dest_state"], _BLUE) for r in corridors]
+    fig = go.Figure(go.Bar(
+        x=[r["tonnes"] for r in corridors],
+        y=_labels,
+        orientation="h",
+        marker_color=_colors,
+        hovertemplate=(
+            "<b>%{y}</b><br>"
+            "Tonnes: %{x:,.0f}<br>"
+            "Cost/Tonne: $%{customdata[0]:,.2f}<br>"
+            "CO\u2082: %{customdata[1]:,.1f} t<extra></extra>"
+        ),
+        customdata=[[r["cost_per_tonne"], r["co2"]] for r in corridors],
+    ))
+    fig.update_layout(
+        **_PLOTLY_LAYOUT,
+        xaxis_title="Annual Tonnes",
+        yaxis=dict(autorange="reversed"),
+        height=max(280, len(corridors) * 36 + 60),
+        margin=dict(l=10, r=10, t=10, b=10),
+        showlegend=False,
+    )
+    st.plotly_chart(fig, use_container_width=True)
+    _seen_states = list(dict.fromkeys(r["dest_state"] for r in corridors))
+    if _seen_states:
+        _chips = " ".join(
+            f'<span style="background:{STATE_COLORS.get(s, _BLUE)}; color:white; '
+            f'padding:2px 8px; border-radius:3px; font-size:10px; font-weight:600; '
+            f'margin-right:3px;">{s}</span>'
+            for s in _seen_states
+        )
+        st.markdown(
+            f'<div style="margin-top:4px; line-height:2.2;">Destination state: {_chips}</div>',
+            unsafe_allow_html=True,
+        )
+
+
+def _load_commodity_od_corridors_l3_filtered(
+    industry_filter: frozenset | None,
+    commodity_filter: frozenset | None,
+    orig_lga: str | None = None,
+    orig_state_arg: str | None = None,
+) -> tuple[dict[str, list[dict]], str | None]:
+    """
+    Aggregate Level 3 local data per (commodity_key, orig_lga, dest_lga) triple.
+
+    Returns {commodity_key: [top10 corridor dicts sorted by tonnes desc]}.
+
+    Each corridor dict has:
+        orig_lga, dest_lga, orig_name, dest_name, orig_state, dest_state,
+        tonnes, transport_cost, cost_per_tonne, co2, trips
+    """
+    if not LOCAL_DATA_ROOT_L3.exists():
+        return {}, f"Level 3 local data not found: {LOCAL_DATA_ROOT_L3}"
+
+    if orig_lga is not None and orig_state_arg is not None:
+        candidate = LOCAL_DATA_ROOT_L3 / orig_state_arg / f"{orig_lga}.json"
+        if not candidate.exists():
+            return {}, f"Level 3 local data not found for {orig_lga} / {orig_state_arg}"
+        json_files = [candidate]
+    else:
+        json_files = []
+        for state_dir in sorted(LOCAL_DATA_ROOT_L3.iterdir()):
+            if state_dir.is_dir():
+                json_files.extend(sorted(state_dir.glob("*.json")))
+
+    # accum: {commodity_key: {(orig_lga, dest_lga): corridor_dict}}
+    accum: dict[str, dict[tuple, dict]] = {}
+
+    for jf in json_files:
+        jf_orig = jf.stem
+        try:
+            data = json.loads(jf.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for dest_lga_code, records in data.get("destinations", {}).items():
+            if not records:
+                continue
+            filtered = records
+            if industry_filter:
+                filtered = [r for r in filtered if r.get("industry") in industry_filter]
+            if commodity_filter:
+                filtered = [
+                    r for r in filtered
+                    if _normalize(r.get("commodity", "")) in commodity_filter
+                ]
+            for r in filtered:
+                key = _normalize(r.get("commodity", "unknown"))
+                od_key = (jf_orig, dest_lga_code)
+                if key not in accum:
+                    accum[key] = {}
+                if od_key not in accum[key]:
+                    accum[key][od_key] = {
+                        "orig_lga":   jf_orig,
+                        "dest_lga":   dest_lga_code,
+                        "tonnes":     0.0,
+                        "transport_cost": 0.0,
+                        "co2":        0.0,
+                        "trips":      0,
+                    }
+                a = accum[key][od_key]
+                a["tonnes"]         += r.get("tonnes", 0.0)
+                a["transport_cost"] += r.get("trip_transport_costs", 0.0)
+                a["co2"]            += r.get("co2_tn", 0.0)
+                a["trips"]          += int(r.get("trips_count", 0))
+
+    result: dict[str, list[dict]] = {}
+    for comm_key, od_dict in accum.items():
+        corridors = sorted(od_dict.values(), key=lambda x: x["tonnes"], reverse=True)
+        for c in corridors:
+            c["cost_per_tonne"] = c["transport_cost"] / c["tonnes"] if c["tonnes"] else 0.0
+            c["orig_name"]  = LGA_CODES.get(c["orig_lga"], c["orig_lga"])
+            c["dest_name"]  = LGA_CODES.get(c["dest_lga"], c["dest_lga"])
+            c["orig_state"] = LGA_STATE.get(c["orig_lga"], "")
+            c["dest_state"] = LGA_STATE.get(c["dest_lga"], "")
+        result[comm_key] = corridors[:10]
+
+    return result, None
+
+
+@st.cache_data(show_spinner=False)
+def _cached_commodity_od_corridors(
+    industry_filter_frozen: frozenset | None,
+    commodity_filter_frozen: frozenset | None,
+    orig_lga: str | None = None,
+    orig_state_arg: str | None = None,
+) -> tuple[dict[str, list[dict]], str | None]:
+    """Cached wrapper for _load_commodity_od_corridors_l3_filtered."""
+    return _load_commodity_od_corridors_l3_filtered(
         industry_filter_frozen,
         commodity_filter_frozen,
         orig_lga=orig_lga,
@@ -1454,6 +1602,188 @@ scale and cost efficiency across the filtered group.
                     "Coloured by industry group \u00b7 "
                     "Hover for full metrics"
                 )
+
+        # ── Chart 1 — Multi-Metric Commodity Comparison Table ────────────────
+        st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
+        chart_header("Multi-Metric Commodity Comparison", """
+**Multi-Metric Commodity Comparison**
+
+Each row = one matched commodity. Columns show all key freight metrics side by side,
+making it easy to compare performance across commodities in the current filter group.
+
+| Column | Formula / Meaning |
+|---|---|
+| **Tonnes** | SUM of annual tonnes across all OD corridors in scope |
+| **Cost/Tonne ($)** | SUM(transport\\_cost) / SUM(tonnes) — weighted average |
+| **CO\u2082/Tonne (kg)** | SUM(co2) / SUM(tonnes) \u00d7 1000 — carbon intensity |
+| **Load Factor (t/trip)** | SUM(tonnes) / SUM(trips) — trailer utilisation proxy |
+| **OD Pairs** | Number of distinct origin\u2192destination corridors carrying this commodity |
+| **Total CO\u2082 (t)** | SUM of annual CO\u2082 across all OD corridors in scope |
+
+> **TOTAL row** shows column sums or weighted averages where appropriate.
+> Download the table as CSV using the button below.
+""", section=False)
+
+        _ci_df_rows = [
+            {
+                "Commodity":             r["commodity_display"],
+                "Industry":              r["industry"].replace("_", " ").title() if r["industry"] else "",
+                "Tonnes":                r["tonnes"],
+                "Cost/Tonne ($)":        r["cost_per_tonne"],
+                "CO\u2082/Tonne (kg)":   r["co2"] / r["tonnes"] * 1000 if r["tonnes"] else 0.0,
+                "Load Factor (t/trip)":  r["tonnes"] / r["trips"] if r["trips"] else 0.0,
+                "OD Pairs":              r["od_pairs"],
+                "Total CO\u2082 (t)":    r["co2"],
+            }
+            for r in _comm_rows
+        ]
+        _ci_total_trips = sum(r["trips"] for r in _comm_rows)
+        _ci_df_rows.append({
+            "Commodity":             "TOTAL / WEIGHTED AVG",
+            "Industry":              "",
+            "Tonnes":                _ci_total_tonnes,
+            "Cost/Tonne ($)":        _ci_total_cost / _ci_total_tonnes if _ci_total_tonnes else 0.0,
+            "CO\u2082/Tonne (kg)":   _ci_total_co2 / _ci_total_tonnes * 1000 if _ci_total_tonnes else 0.0,
+            "Load Factor (t/trip)":  _ci_total_tonnes / _ci_total_trips if _ci_total_trips else 0.0,
+            "OD Pairs":              sum(r["od_pairs"] for r in _comm_rows),
+            "Total CO\u2082 (t)":    _ci_total_co2,
+        })
+        _ci_display_df = pd.DataFrame(_ci_df_rows)
+        st.dataframe(
+            _ci_display_df.style.format({
+                "Tonnes":               "{:,.0f}",
+                "Cost/Tonne ($)":       "${:,.2f}",
+                "CO\u2082/Tonne (kg)":  "{:,.2f}",
+                "Load Factor (t/trip)": "{:,.2f}",
+                "OD Pairs":             "{:,}",
+                "Total CO\u2082 (t)":   "{:,.1f}",
+            }),
+            use_container_width=True,
+            hide_index=True,
+        )
+        _ci_csv = _ci_display_df.to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "\u2b07\ufe0f Download Comparison Table (CSV)",
+            data=_ci_csv,
+            file_name="commodity_comparison.csv",
+            mime="text/csv",
+            key="dl_commodity_comparison",
+        )
+
+        # ── Chart 2 — Freight Value-to-Cost Ratio ────────────────────────────
+        st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
+        chart_header("Freight Value-to-Cost Ratio", """
+**Freight Value-to-Cost Ratio**
+
+Each bar shows the **economic return per dollar of transport cost** for one commodity:
+
+> **Ratio = Total Freight Value \u00f7 Total Transport Cost**
+
+- **High ratio (green)** \u2014 freight is high-value relative to its transport cost;
+  every dollar of logistics moves valuable goods (e.g. medicines, premium food)
+- **Low ratio (amber)** \u2014 bulk or lower-margin commodity where transport is a
+  larger share of total declared value (e.g. waste, low-grade grain)
+- **Ratio < 1** \u2014 transport cost exceeds declared freight value (suppressed flows
+  or data artefacts \u2014 treat with caution)
+
+Bars sorted highest to lowest. Hover to see absolute freight value and transport cost.
+""", section=False)
+
+        _ci_vcr = [
+            {**r, "value_cost_ratio": r["freight_value"] / r["transport_cost"]
+             if r["transport_cost"] > 0 else 0.0}
+            for r in _comm_rows
+        ]
+        _ci_vcr.sort(key=lambda x: x["value_cost_ratio"], reverse=True)
+        _ci_vcr_max = max(r["value_cost_ratio"] for r in _ci_vcr) or 1.0
+
+        def _vcr_color(ratio: float, max_r: float) -> str:
+            """Interpolate amber(217,119,6) \u2192 green(16,185,129) by ratio fraction."""
+            t = min(1.0, ratio / max_r)
+            return (
+                f"rgba({int(217 - 201 * t)},"
+                f"{int(119 + 66  * t)},"
+                f"{int(6   + 123 * t)},0.85)"
+            )
+
+        _ci_vcr_colors = [_vcr_color(r["value_cost_ratio"], _ci_vcr_max) for r in _ci_vcr]
+
+        fig_vcr = go.Figure(go.Bar(
+            x=[r["value_cost_ratio"] for r in _ci_vcr],
+            y=[r["commodity_display"] for r in _ci_vcr],
+            orientation="h",
+            marker_color=_ci_vcr_colors,
+            hovertemplate=(
+                "<b>%{y}</b><br>"
+                "Value / Cost Ratio: %{x:.2f}\u00d7<br>"
+                "Freight Value: $%{customdata[0]:,.0f}<br>"
+                "Transport Cost: $%{customdata[1]:,.0f}<extra></extra>"
+            ),
+            customdata=[[r["freight_value"], r["transport_cost"]] for r in _ci_vcr],
+        ))
+        fig_vcr.update_layout(
+            **_PLOTLY_LAYOUT,
+            xaxis_title="Freight Value / Transport Cost (\u00d7)",
+            yaxis=dict(autorange="reversed"),
+            height=max(300, len(_ci_vcr) * 26 + 60),
+            margin=dict(l=10, r=10, t=10, b=10),
+            showlegend=False,
+        )
+        st.plotly_chart(fig_vcr, use_container_width=True)
+        st.caption(
+            "Green = high-value freight \u00b7 Amber = lower-margin / bulk freight \u00b7 "
+            "Hover for absolute freight value and transport cost"
+        )
+
+        # ── Chart 3 — Top 10 OD Corridors per Commodity (tabbed) ─────────────
+        st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
+        chart_header("Top 10 OD Corridors by Commodity", """
+**Top 10 OD Corridors by Commodity**
+
+Each tab (or dropdown) shows the **top 10 freight corridors** for one matched commodity,
+sorted by annual tonnes.
+
+- Each bar = one origin \u2192 destination LGA pair
+- **Bar colour** = destination state (same palette as state-level charts)
+- **Hover** to see tonnes, cost per tonne, and CO\u2082
+
+> Corridors with fewer than \u223c5 movements per commodity are suppressed by CSIRO
+> and will not appear here. National view covers all downloaded origin LGAs.
+""", section=False)
+
+        with st.spinner("Loading top OD corridors\u2026"):
+            if is_national:
+                _corr_data, _corr_err = _cached_commodity_od_corridors(
+                    industry_filter, commodity_filter,
+                    orig_lga=None, orig_state_arg=None,
+                )
+            else:
+                _corr_data, _corr_err = _cached_commodity_od_corridors(
+                    industry_filter, commodity_filter,
+                    orig_lga=orig_code, orig_state_arg=orig_state_abbr,
+                )
+
+        if _corr_err:
+            st.warning(f"Could not load corridor data: {_corr_err}")
+        elif not _corr_data:
+            st.info("No corridor data matched the current filter.", icon="\u2139\ufe0f")
+        else:
+            _corr_keys   = [r["commodity_key"] for r in _comm_rows if r["commodity_key"] in _corr_data]
+            _corr_labels = [_fmt_commodity(k) for k in _corr_keys]
+
+            if len(_corr_keys) <= 8:
+                _corr_tabs = st.tabs(_corr_labels)
+                for _ctab, _ck in zip(_corr_tabs, _corr_keys):
+                    with _ctab:
+                        _render_corridor_bar(_corr_data[_ck], _ck)
+            else:
+                _sel_label = st.selectbox(
+                    "Select commodity to view top corridors:",
+                    options=_corr_labels,
+                    key="comm_corr_select",
+                )
+                _sel_key = _corr_keys[_corr_labels.index(_sel_label)]
+                _render_corridor_bar(_corr_data[_sel_key], _sel_key)
 
     st.divider()
 
