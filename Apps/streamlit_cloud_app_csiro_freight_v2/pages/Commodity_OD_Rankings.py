@@ -458,21 +458,28 @@ def _cached_commodity_summary(
 # Commodity Filter Insights — corridor-level loader (per-commodity top-10 OD)
 # ---------------------------------------------------------------------------
 
-def _render_corridor_bar(corridors: list[dict], comm_key: str) -> None:
+def _render_corridor_bar(
+    corridors: list[dict],
+    comm_key: str,
+    rank_field: str = "tonnes",
+    axis_label: str = "Annual Tonnes",
+    fmt_str: str = ",.0f",
+) -> None:
     """Render a Top-10 OD corridor horizontal bar chart for one commodity."""
     if not corridors:
         st.info(f"No corridor data for {_fmt_commodity(comm_key)}.", icon="ℹ️")
         return
+    corridors = sorted(corridors, key=lambda r: r[rank_field], reverse=True)
     _labels = [f"{r['orig_name']} \u2192 {r['dest_name']}" for r in corridors]
     _colors = [STATE_COLORS.get(r["dest_state"], _BLUE) for r in corridors]
     fig = go.Figure(go.Bar(
-        x=[r["tonnes"] for r in corridors],
+        x=[r[rank_field] for r in corridors],
         y=_labels,
         orientation="h",
         marker_color=_colors,
         hovertemplate=(
             "<b>%{y}</b><br>"
-            "Tonnes: %{x:,.0f}<br>"
+            f"{axis_label}: %{{x:{fmt_str}}}<br>"
             "Cost/Tonne: $%{customdata[0]:,.2f}<br>"
             "CO\u2082: %{customdata[1]:,.1f} t<extra></extra>"
         ),
@@ -480,7 +487,7 @@ def _render_corridor_bar(corridors: list[dict], comm_key: str) -> None:
     ))
     fig.update_layout(
         **_PLOTLY_LAYOUT,
-        xaxis_title="Annual Tonnes",
+        xaxis_title=axis_label,
         yaxis=dict(autorange="reversed"),
         height=max(280, len(corridors) * 36 + 60),
         margin=dict(l=10, r=10, t=10, b=10),
@@ -1460,20 +1467,23 @@ whether Beef, Chicken, Fish or Lamb dominates by volume.
         }
 
         # ── Chart columns ────────────────────────────────────────────────────
+        # Re-sort by selected rank metric (raw load is always tonnes-desc)
+        _comm_rows = sorted(_comm_rows, key=lambda r: r[rank_field], reverse=True)
+
         _ci_col_a, _ci_col_b = st.columns(2)
 
-        # ── Chart A — Commodity Share by Tonnes ──────────────────────────────
+        # ── Chart A — Commodity Share by Rank Metric ─────────────────────────
         with _ci_col_a:
-            chart_header("Commodity Share by Tonnes", """
-**Commodity Share by Tonnes**
+            chart_header(f"Commodity Share by {rank_metric}", f"""
+**Commodity Share by {rank_metric}**
 
 Each horizontal bar represents one commodity, sorted from highest to lowest
-annual tonnage. Bar colour indicates the **industry group** (e.g. food, livestock,
-grains) as classified in the CSIRO TraNSIT dataset.
+by the selected **Rank By** metric. Bar colour indicates the **industry group**
+(e.g. food, livestock, grains) as classified in the CSIRO TraNSIT dataset.
 
 - Values are **annual totals** summed across all OD corridors in the current scope
-- Hover to see **tonnes** and **weighted average cost per tonne** for each commodity
-- Maximum **20 commodities** shown; if the filter returns more, the lowest-volume
+- Hover to see the ranked metric value and **weighted average cost per tonne**
+- Maximum **20 commodities** shown; if the filter returns more, the lowest-ranked
   ones are omitted from this chart but still appear in the full rankings table below
 
 > **Colour key:** See the industry label chips below the chart.
@@ -1484,20 +1494,20 @@ grains) as classified in the CSIRO TraNSIT dataset.
                 _INDUSTRY_COLORS.get(r["industry"], _BLUE) for r in _ci_top20
             ]
             fig_ci_a = go.Figure(go.Bar(
-                x=[r["tonnes"] for r in _ci_top20],
+                x=[r[rank_field] for r in _ci_top20],
                 y=[r["commodity_display"] for r in _ci_top20],
                 orientation="h",
                 marker_color=_ci_bar_colors,
                 hovertemplate=(
                     "<b>%{y}</b><br>"
-                    "Tonnes: %{x:,.0f}<br>"
+                    f"{axis_label}: %{{x:{fmt_str}}}<br>"
                     "Cost/Tonne: $%{customdata[0]:,.2f}<extra></extra>"
                 ),
                 customdata=[[r["cost_per_tonne"]] for r in _ci_top20],
             ))
             fig_ci_a.update_layout(
                 **_PLOTLY_LAYOUT,
-                xaxis_title="Annual Tonnes",
+                xaxis_title=axis_label,
                 yaxis=dict(autorange="reversed"),
                 height=max(300, len(_ci_top20) * 26 + 60),
                 margin=dict(l=10, r=10, t=10, b=10),
@@ -1737,15 +1747,15 @@ Bars sorted highest to lowest. Hover to see absolute freight value and transport
 
         # ── Chart 3 — Top 10 OD Corridors per Commodity (tabbed) ─────────────
         st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
-        chart_header("Top 10 OD Corridors by Commodity", """
+        chart_header("Top 10 OD Corridors by Commodity", f"""
 **Top 10 OD Corridors by Commodity**
 
 Each tab (or dropdown) shows the **top 10 freight corridors** for one matched commodity,
-sorted by annual tonnes.
+sorted by **{rank_metric}**.
 
 - Each bar = one origin \u2192 destination LGA pair
 - **Bar colour** = destination state (same palette as state-level charts)
-- **Hover** to see tonnes, cost per tonne, and CO\u2082
+- **Hover** to see the ranked metric, cost per tonne, and CO\u2082
 
 > Corridors with fewer than \u223c5 movements per commodity are suppressed by CSIRO
 > and will not appear here. National view covers all downloaded origin LGAs.
@@ -1775,7 +1785,8 @@ sorted by annual tonnes.
                 _corr_tabs = st.tabs(_corr_labels)
                 for _ctab, _ck in zip(_corr_tabs, _corr_keys):
                     with _ctab:
-                        _render_corridor_bar(_corr_data[_ck], _ck)
+                        _render_corridor_bar(_corr_data[_ck], _ck,
+                                             rank_field=rank_field, axis_label=axis_label, fmt_str=fmt_str)
             else:
                 _sel_label = st.selectbox(
                     "Select commodity to view top corridors:",
@@ -1783,7 +1794,8 @@ sorted by annual tonnes.
                     key="comm_corr_select",
                 )
                 _sel_key = _corr_keys[_corr_labels.index(_sel_label)]
-                _render_corridor_bar(_corr_data[_sel_key], _sel_key)
+                _render_corridor_bar(_corr_data[_sel_key], _sel_key,
+                                     rank_field=rank_field, axis_label=axis_label, fmt_str=fmt_str)
 
     st.divider()
 
