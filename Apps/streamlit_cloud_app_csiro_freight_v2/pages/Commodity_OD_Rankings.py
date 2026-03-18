@@ -1546,16 +1546,19 @@ scale and cost efficiency across the filtered group.
 
 | Axis / Property | Meaning |
 |---|---|
-| **X-axis** | Total annual tonnes (volume proxy) |
-| **Y-axis** | Weighted avg cost per tonne — `SUM(transport_cost) / SUM(tonnes)` |
-| **Dot size** | Proportional to total CO₂ emissions (min 8 px, max 40 px) |
-| **Dot colour** | Industry group (same palette as Chart A) |
+| **X-axis** | Total annual tonnes (volume) |
+| **Y-axis** | Average cost per tonne (AUD) — total transport cost divided by total tonnes |
+| **Dot size** | Proportional to total CO₂ emissions — bigger dot = more emissions |
+| **Dot colour** | Industry group (same colour palette as the bar chart on the left) |
 
-**Quadrant interpretation:**
-- **Top-left** — expensive, low-volume (specialised or long-haul goods)
-- **Top-right** — expensive, high-volume (premium bulk freight)
-- **Bottom-left** — cheap, low-volume (minor local flows)
-- **Bottom-right** — cost-efficient, high-volume (bulk commodities)
+**How to read the quadrants:**
+- **Top-left** — expensive and low-volume (e.g. specialised or long-distance goods)
+- **Top-right** — expensive and high-volume (e.g. premium bulk freight)
+- **Bottom-left** — cheap and low-volume (minor or local flows)
+- **Bottom-right** — cost-efficient and high-volume (e.g. bulk grain, minerals)
+
+> **Note:** This chart always shows Cost vs Volume and does not change with the
+> Rank By selector — it provides a fixed reference view for comparing commodities.
 
 > Requires at least **2 matched commodities** to render.
 > Hover over any dot for full metrics.
@@ -1608,7 +1611,7 @@ scale and cost efficiency across the filtered group.
                 )
                 st.plotly_chart(fig_ci_b, use_container_width=True)
                 st.caption(
-                    "Dot size \u221d CO\u2082 emissions \u00b7 "
+                    "Dot size proportional to CO\u2082 emissions \u00b7 "
                     "Coloured by industry group \u00b7 "
                     "Hover for full metrics"
                 )
@@ -1621,17 +1624,19 @@ scale and cost efficiency across the filtered group.
 Each row = one matched commodity. Columns show all key freight metrics side by side,
 making it easy to compare performance across commodities in the current filter group.
 
-| Column | Formula / Meaning |
+| Column | What it means |
 |---|---|
-| **Tonnes** | SUM of annual tonnes across all OD corridors in scope |
-| **Cost/Tonne ($)** | SUM(transport\\_cost) / SUM(tonnes) — weighted average |
-| **CO\u2082/Tonne (kg)** | SUM(co2) / SUM(tonnes) \u00d7 1000 — carbon intensity |
-| **Load Factor (t/trip)** | SUM(tonnes) / SUM(trips) — trailer utilisation proxy |
-| **OD Pairs** | Number of distinct origin\u2192destination corridors carrying this commodity |
-| **Total CO\u2082 (t)** | SUM of annual CO\u2082 across all OD corridors in scope |
+| **Tonnes** | Total annual tonnes moved across all routes in the current scope |
+| **Cost/Tonne ($)** | Average transport cost per tonne — lower is more cost-efficient |
+| **CO\u2082/Tonne (kg)** | Carbon emissions per tonne moved — lower is cleaner freight |
+| **Load Factor (t/trip)** | Average tonnes per trip — higher means fuller loads and better efficiency |
+| **OD Pairs** | Number of distinct origin\u2192destination routes carrying this commodity |
+| **Total CO\u2082 (t)** | Total annual CO\u2082 emissions across all routes in the current scope |
 
-> **TOTAL row** shows column sums or weighted averages where appropriate.
-> Download the table as CSV using the button below.
+> **TOTAL / WEIGHTED AVG row:** Tonnes, OD Pairs and Total CO\u2082 are summed across
+> all commodities. Cost/Tonne, CO\u2082/Tonne and Load Factor are weighted averages
+> (heavier commodities count more).
+> Download the full table as CSV using the button below.
 """, section=False)
 
         _ci_df_rows = [
@@ -1750,12 +1755,18 @@ Bars sorted highest to lowest. Hover to see absolute freight value and transport
         chart_header("Top 10 OD Corridors by Commodity", f"""
 **Top 10 OD Corridors by Commodity**
 
-Each tab (or dropdown) shows the **top 10 freight corridors** for one matched commodity,
+Each tab (or dropdown) shows the **top freight corridors** for one matched commodity,
 sorted by **{rank_metric}**.
 
 - Each bar = one origin \u2192 destination LGA pair
-- **Bar colour** = destination state (same palette as state-level charts)
+- **Bar colour** = destination state (same colour palette as other state-level charts)
 - **Hover** to see the ranked metric, cost per tonne, and CO\u2082
+- **Tab order** follows the Rank By sort — the highest-ranked commodity appears first
+
+> **Note on corridor coverage:** For performance, corridors are pre-loaded as the
+> top 10 by annual tonnes per commodity. When a different Rank By metric is selected
+> (e.g. Trips or CO\u2082), bars are re-ordered within those 10 corridors. Routes that
+> rank highly by Trips but have lower tonnes may not appear here.
 
 > Corridors with fewer than \u223c5 movements per commodity are suppressed by CSIRO
 > and will not appear here. National view covers all downloaded origin LGAs.
@@ -2230,19 +2241,22 @@ Dashed lines = median. Dot size \u221d tonnes.
             height=380, margin=dict(l=10, r=10, t=20, b=10),
         )
         st.plotly_chart(fig_b7, use_container_width=True)
-        st.caption("Dashed lines = median tonnes & median freight value. Dot size \u221d tonnes.")
+        st.caption("Dashed lines = median tonnes & median freight value. Dot size proportional to tonnes.")
 
 with col_r3:
     chart_header("CO\u2082 vs Transport Cost", """
 **CO\u2082 vs Transport Cost**
 
-Environmental vs economic cost trade-off. Values reflect selected commodity type(s).
+Shows the environmental vs economic trade-off for each freight corridor.
+Values reflect only the selected commodity type(s).
 
-- **Top-right** — high cost + high emissions (long-haul, high-volume)
-- **Bottom-left** — short or minor corridors
-- Corridors with no data appear at (0, 0)
+- **Top-right** — high cost and high emissions (typically long-haul, high-volume routes)
+- **Bottom-left** — low cost and low emissions (short or minor corridors)
+- **Top-left** — high emissions relative to cost (may indicate heavy but cheap bulk goods)
+- **Bottom-right** — low emissions despite high cost (specialised, low-volume freight)
+- Corridors with no matching data appear at (0, 0)
 
-Dot size \u221d tonnes.
+Dot size proportional to annual tonnes — larger dots move more freight.
 """, section=False)
 
     if df["transport_cost"].sum() == 0:

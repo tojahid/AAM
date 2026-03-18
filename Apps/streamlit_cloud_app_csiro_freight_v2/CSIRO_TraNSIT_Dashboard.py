@@ -784,15 +784,23 @@ st.divider()
 chart_header("Freight Profile Charts", """
 **Freight Profile Charts**
 
-Four charts providing a deeper view of this corridor's freight characteristics, each using a separate TraNSIT API endpoint:
-- **A1** Trip Length Distribution — *triplengthreport*
-- **A2** Supply Chain Flows — *supplychainreport*
-- **A3** Transport Cost Breakdown — *transportlogisticsreport*
-- **B4** Freight Composition Donut — *commodityreport*
+Four complementary charts that reveal different aspects of how freight moves on
+this corridor. Each chart draws from a separate CSIRO TraNSIT data source:
+
+- **A1 Trip Length** — Are most loads short local runs or long interstate trips?
+  Short trips suggest frequent pick-ups; long trips suggest consolidated loads.
+- **A2 Supply Chain** — What types of locations are connected on this route?
+  (e.g. Farm \u2192 Processor, Port \u2192 Warehouse, Distribution Centre \u2192 Retail)
+- **A3 Transport Cost** — What drives the cost? Fuel, Labour, Capital, or
+  Loading/Unloading time? Longer corridors typically show higher Fuel and Driver shares.
+- **B4 Freight Composition** — Which industries move the most freight?
+  A single dominant industry suggests a specialised corridor; a diverse mix
+  indicates a general-purpose route.
 """)
 st.markdown(
     '<div class="helper-text">'
-    'Charts replicating the CSIRO TraNSIT dashboard visualisations for this OD corridor.'
+    'These four charts reveal how freight moves on this corridor \u2014 trip patterns, '
+    'supply chain structure, cost drivers, and industry mix.'
     '</div>',
     unsafe_allow_html=True,
 )
@@ -825,12 +833,18 @@ with chart_col1:
     chart_header("Trip Length Distribution", """
 **A1 — Trip Length Distribution**
 
-Shows how freight on this corridor splits across three trip length categories:
-- **Short** — trips up to ~100 km
-- **Medium** — trips from ~100 to ~500 km
-- **Long** — trips over ~500 km
+Shows how freight on this corridor splits across three distance categories:
+- **Short** — trips up to ~100 km (local and regional runs)
+- **Medium** — trips from ~100 to ~500 km (inter-regional)
+- **Long** — trips over ~500 km (interstate and long-haul)
 
-Each bar group represents one commodity sector. Toggle between **Tonnes** and **Trips** to compare whether short or long trips dominate by freight volume or trip frequency.
+Each bar group represents one commodity sector. Toggle between **Tonnes** and **Trips**
+to compare whether short or long trips dominate by freight volume or trip frequency.
+
+**What to look for:**
+- A long-haul dominated corridor may benefit from consolidated loads to reduce cost per tonne
+- A short-haul dominated corridor is better served by local distribution hubs
+- A mix of short and long trips often indicates a multi-stop supply chain
 
 *Source: triplengthreport endpoint*
 """, section=False)
@@ -1056,11 +1070,17 @@ st.divider()
 chart_header("OD Corridor Rankings", """
 **OD Corridor Rankings — Page 2**
 
-Navigate to Page 2 to compare this corridor against all other destinations from this origin.
+Navigate to Page 2 to compare this corridor against all other destinations from this origin,
+or to see national rankings across all freight corridors in Australia.
 
-- **Online API mode** — uses the densitymap endpoint; fast but numbers differ from Page 1
-- **Local Data mode** — uses the downloaded commodityreport cache; consistent with Page 1 metrics
-- **National mode** — requires local data to be downloaded for all states first
+**Data source options on Page 2:**
+- **Online API mode** — fast and always current, but uses a different calculation method;
+  numbers may differ from what you see on this page
+- **Local Data mode** — uses the pre-downloaded data cache; numbers match this page exactly
+- **National mode** — compares all OD corridors across Australia (requires local data)
+
+> **Tip:** Choose **Local Data** mode on Page 2 to see rankings that match the metrics
+> shown here. The destination highlighted on this page will appear in orange on Page 2.
 """)
 st.markdown(
     '<div class="helper-text">'
