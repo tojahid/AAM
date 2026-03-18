@@ -618,12 +618,96 @@ def _cached_commodity_od_corridors(
 
 
 # ---------------------------------------------------------------------------
+# State × Commodity summary loader (for Commodity Overview heatmap)
+# ---------------------------------------------------------------------------
+
+def _load_state_commodity_summary_l3(
+    state_filter: frozenset | None = None,
+) -> tuple[dict[tuple, dict], str | None]:
+    """
+    Aggregate Level 3 local data by (orig_state, commodity_key).
+    Returns {(orig_state, commodity_key): {tonnes, transport_cost, co2, trips, cost_per_tonne}}.
+    state_filter: when provided, only scans those state directories.
+    """
+    if not LOCAL_DATA_ROOT_L3.exists():
+        return {}, f"Level 3 local data not found: {LOCAL_DATA_ROOT_L3}"
+
+    accum: dict[tuple, dict] = {}
+    for state_dir in sorted(LOCAL_DATA_ROOT_L3.iterdir()):
+        if not state_dir.is_dir():
+            continue
+        orig_state = state_dir.name
+        if state_filter and orig_state not in state_filter:
+            continue
+        for jf in sorted(state_dir.glob("*.json")):
+            try:
+                data = json.loads(jf.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            for _dest, records in data.get("destinations", {}).items():
+                for r in records:
+                    key = _normalize(r.get("commodity", "unknown"))
+                    sk = (orig_state, key)
+                    if sk not in accum:
+                        accum[sk] = {"tonnes": 0.0, "transport_cost": 0.0,
+                                     "co2": 0.0, "trips": 0}
+                    a = accum[sk]
+                    a["tonnes"]         += r.get("tonnes", 0.0)
+                    a["transport_cost"] += r.get("trip_transport_costs", 0.0)
+                    a["co2"]            += r.get("co2_tn", 0.0)
+                    a["trips"]          += int(r.get("trips_count", 0))
+
+    for v in accum.values():
+        v["cost_per_tonne"] = v["transport_cost"] / v["tonnes"] if v["tonnes"] else 0.0
+
+    return accum, None
+
+
+@st.cache_data(show_spinner=False)
+def _cached_state_commodity_summary(
+    state_filter_frozen: frozenset = frozenset(),
+) -> tuple[dict[tuple, dict], str | None]:
+    """Cached wrapper for _load_state_commodity_summary_l3."""
+    return _load_state_commodity_summary_l3(
+        state_filter=state_filter_frozen or None,
+    )
+
+
+# ---------------------------------------------------------------------------
 # Colour palette and Plotly layout
 # ---------------------------------------------------------------------------
 
 _BLUE   = "#2563EB"
 _ORANGE = "#F97316"
 _GREY   = "rgba(37,99,235,0.55)"
+
+_INDUSTRY_COLORS: dict[str, str] = {
+    "food":              "#10B981",
+    "livestock":         "#F97316",
+    "vehicles":          "#4F46E5",
+    "waste":             "#9CA3AF",
+    "horticulture":      "#34D399",
+    "wood_product":      "#92400E",
+    "beverage":          "#2563EB",
+    "alcohol_beverage":  "#1D4ED8",
+    "medicines":         "#DC2626",
+    "fuel":              "#D97706",
+    "grains":            "#A16207",
+    "meat":              "#EF4444",
+    "dairy_product":     "#0EA5E9",
+    "seafood":           "#0D9488",
+    "fruit":             "#F59E0B",
+    "vegetables":        "#16A34A",
+    "chemicals":         "#6B7280",
+    "fibre":             "#A3E635",
+    "sugar":             "#FCD34D",
+    "viticulture":       "#7C3AED",
+    "nuts":              "#78350F",
+    "tissue_product":    "#BAE6FD",
+    "ppe":               "#E879F9",
+    "household_general": "#6B7280",
+    "other_retail_ess":  "#9CA3AF",
+}
 
 _PLOTLY_LAYOUT = dict(
     template="plotly_white",
@@ -1447,35 +1531,6 @@ whether Beef, Chicken, Fish or Lamb dominates by volume.
             st.metric("Total CO\u2082", _fmt_ci_tonnes(_ci_total_co2))
 
         st.markdown("<div style='margin-top:16px;'></div>", unsafe_allow_html=True)
-
-        # ── Industry colour map ──────────────────────────────────────────────
-        _INDUSTRY_COLORS: dict[str, str] = {
-            "food":              "#10B981",
-            "livestock":         "#F97316",
-            "vehicles":          "#4F46E5",
-            "waste":             "#9CA3AF",
-            "horticulture":      "#34D399",
-            "wood_product":      "#92400E",
-            "beverage":          "#2563EB",
-            "alcohol_beverage":  "#1D4ED8",
-            "medicines":         "#DC2626",
-            "fuel":              "#D97706",
-            "grains":            "#A16207",
-            "meat":              "#EF4444",
-            "dairy_product":     "#0EA5E9",
-            "seafood":           "#0D9488",
-            "fruit":             "#F59E0B",
-            "vegetables":        "#16A34A",
-            "chemicals":         "#6B7280",
-            "fibre":             "#A3E635",
-            "sugar":             "#FCD34D",
-            "viticulture":       "#7C3AED",
-            "nuts":              "#78350F",
-            "tissue_product":    "#BAE6FD",
-            "ppe":               "#E879F9",
-            "household_general": "#6B7280",
-            "other_retail_ess":  "#9CA3AF",
-        }
 
         # ── Chart columns ────────────────────────────────────────────────────
         # Re-sort by selected rank metric (raw load is always tonnes-desc)
@@ -2484,6 +2539,221 @@ st.download_button(
 )
 
 st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
+
+# ---------------------------------------------------------------------------
+# Commodity Overview — national, no commodity/industry filter, local data only
+# ---------------------------------------------------------------------------
+
+if is_national and not is_online and industry_filter is None and commodity_filter is None:
+    st.divider()
+
+    chart_header("Commodity Overview", f"""
+**Commodity Overview**
+
+Top-level commodity breakdown across all freight data for the current scope
+({'selected states' if state_filter else 'all states'}).
+
+- **Industry Group Totals** — freight aggregated to L2 industry groups, ranked by {rank_metric}
+- **Commodity Concentration** — share of total {rank_metric} held by the top 5 commodities vs all others
+- **Freight Value Density** — average freight value per tonne ($/t); reflects commodity economic value; fixed metric
+- **Commodity by Origin State** — heatmap of {{rank_metric}} per commodity × origin state
+
+All charts respond to the **Filter by Origin State** selector and **Rank By** (except Freight Value Density).
+Activate a Commodity Filter in the sidebar for deeper per-commodity analysis.
+""", section=True)
+
+    with st.spinner("Loading commodity overview…"):
+        _ov_rows, _ov_err = _cached_commodity_summary(
+            None, None,
+            orig_lga=None, orig_state_arg=None,
+            state_filter_frozen=frozenset(state_filter) if state_filter else frozenset(),
+        )
+        _sc_data, _sc_err = _cached_state_commodity_summary(
+            state_filter_frozen=frozenset(state_filter) if state_filter else frozenset(),
+        )
+
+    if _ov_err:
+        st.warning(f"Could not load commodity overview: {_ov_err}")
+    elif not _ov_rows:
+        st.info("No commodity data available for the current scope.", icon="ℹ️")
+    else:
+        _ov_rows = sorted(_ov_rows, key=lambda r: r[rank_field], reverse=True)
+
+        # ── NC1: Industry Group Roll-up ────────────────────────────────────
+        chart_header(f"Industry Group Totals by {rank_metric}", f"""
+**Industry Group Totals by {rank_metric}**
+
+Aggregates all individual commodities into their L2 industry groups
+(Food, Livestock, Vehicles, Fuel, etc.) and ranks by **{rank_metric}**.
+
+Coloured by industry group. Responds to Rank By and Origin State filter.
+
+> For Cost/Tonne, the bar value is SUM(transport_cost) / SUM(tonnes) across
+> all commodities in that group — a volume-weighted average.
+""", section=False)
+
+        _ind_agg: dict[str, dict] = {}
+        for _r in _ov_rows:
+            _ind = _r["industry"] or "other"
+            if _ind not in _ind_agg:
+                _ind_agg[_ind] = {"tonnes": 0.0, "transport_cost": 0.0,
+                                   "co2": 0.0, "trips": 0}
+            _ind_agg[_ind]["tonnes"]         += _r["tonnes"]
+            _ind_agg[_ind]["transport_cost"] += _r["transport_cost"]
+            _ind_agg[_ind]["co2"]            += _r["co2"]
+            _ind_agg[_ind]["trips"]          += _r["trips"]
+        for _v in _ind_agg.values():
+            _v["cost_per_tonne"] = _v["transport_cost"] / _v["tonnes"] if _v["tonnes"] else 0.0
+
+        _ind_sorted = sorted(_ind_agg.items(), key=lambda x: x[1][rank_field], reverse=True)
+        _ind_labels = [k.replace("_", " ").title() for k, _ in _ind_sorted]
+        _ind_vals   = [v[rank_field] for _, v in _ind_sorted]
+        _ind_colors = [_INDUSTRY_COLORS.get(k, _BLUE) for k, _ in _ind_sorted]
+
+        fig_nc1 = go.Figure(go.Bar(
+            x=_ind_vals, y=_ind_labels, orientation="h",
+            marker_color=_ind_colors,
+            hovertemplate=f"<b>%{{y}}</b><br>{axis_label}: %{{x:{fmt_str}}}<extra></extra>",
+        ))
+        fig_nc1.update_layout(
+            **_PLOTLY_LAYOUT,
+            xaxis_title=axis_label,
+            yaxis=dict(autorange="reversed"),
+            height=max(300, len(_ind_sorted) * 36 + 60),
+            margin=dict(l=10, r=10, t=10, b=10),
+            showlegend=False,
+        )
+        st.plotly_chart(fig_nc1, use_container_width=True)
+
+        st.markdown("<div style='margin-top:16px;'></div>", unsafe_allow_html=True)
+
+        # ── NC3 + NC4: side by side ────────────────────────────────────────
+        _nc_col1, _nc_col2 = st.columns(2)
+
+        with _nc_col1:
+            chart_header("Commodity Concentration", f"""
+**Commodity Concentration**
+
+Share of total **{rank_metric}** held by the top 5 commodities vs all others combined.
+
+A small number of commodities often dominate total freight — this chart makes
+that concentration immediately visible. Responds to Rank By and Origin State filter.
+""", section=False)
+
+            _top5_ov   = _ov_rows[:5]
+            _rest_val  = sum(_r[rank_field] for _r in _ov_rows[5:])
+            _pie_labels = [_fmt_commodity(_r["commodity_key"]) for _r in _top5_ov] + ["All others"]
+            _pie_vals   = [_r[rank_field] for _r in _top5_ov] + [_rest_val]
+            _pie_colors = [_INDUSTRY_COLORS.get(_r["industry"], _BLUE) for _r in _top5_ov] + ["#D1D5DB"]
+
+            fig_nc3 = go.Figure(go.Pie(
+                labels=_pie_labels, values=_pie_vals,
+                marker_colors=_pie_colors,
+                hole=0.45,
+                textinfo="label+percent",
+                hovertemplate=(
+                    "<b>%{label}</b><br>"
+                    f"{axis_label}: %{{value:{fmt_str}}}<br>"
+                    "Share: %{percent}<extra></extra>"
+                ),
+            ))
+            fig_nc3.update_layout(
+                **_PLOTLY_LAYOUT,
+                height=340,
+                margin=dict(l=10, r=10, t=10, b=10),
+                showlegend=False,
+            )
+            st.plotly_chart(fig_nc3, use_container_width=True)
+
+        with _nc_col2:
+            chart_header("Freight Value Density ($/tonne)", """
+**Freight Value Density**
+
+Average freight value per tonne (AUD/t) for each commodity, sorted highest to lowest.
+
+Higher values = economically dense freight (medicines, vehicles, seafood).
+Lower values = bulk commodities (waste, grain, construction materials).
+
+> Fixed metric — always shows $/tonne regardless of the Rank By selector.
+""", section=False)
+
+            _vd_rows = [_r for _r in _ov_rows if _r["tonnes"] > 0 and _r["freight_value"] > 0]
+            _vd_rows = sorted(
+                _vd_rows,
+                key=lambda _r: _r["freight_value"] / _r["tonnes"],
+                reverse=True,
+            )[:20]
+            _vd_vals   = [_r["freight_value"] / _r["tonnes"] for _r in _vd_rows]
+            _vd_labels = [_fmt_commodity(_r["commodity_key"]) for _r in _vd_rows]
+            _vd_colors = [_INDUSTRY_COLORS.get(_r["industry"], _BLUE) for _r in _vd_rows]
+
+            fig_nc4 = go.Figure(go.Bar(
+                x=_vd_vals, y=_vd_labels, orientation="h",
+                marker_color=_vd_colors,
+                hovertemplate="<b>%{y}</b><br>Value Density: $%{x:,.0f}/t<extra></extra>",
+            ))
+            fig_nc4.update_layout(
+                **_PLOTLY_LAYOUT,
+                xaxis_title="Freight Value (AUD/tonne)",
+                yaxis=dict(autorange="reversed"),
+                height=max(300, len(_vd_rows) * 36 + 60),
+                margin=dict(l=10, r=10, t=10, b=10),
+                showlegend=False,
+            )
+            st.plotly_chart(fig_nc4, use_container_width=True)
+
+        st.markdown("<div style='margin-top:16px;'></div>", unsafe_allow_html=True)
+
+        # ── NC2: State × Commodity Heatmap ────────────────────────────────
+        if _sc_data:
+            chart_header(f"Commodity by Origin State — {rank_metric}", f"""
+**Commodity by Origin State**
+
+Heatmap showing **{rank_metric}** for each commodity (rows) × origin state (columns).
+Darker cells = higher value. White cells = no data for that state-commodity pair.
+
+Top 15 commodities by total {rank_metric} are shown, ordered highest to lowest.
+Responds to Origin State filter and Rank By selector.
+
+> For Cost/Tonne, each cell is the volume-weighted average cost/tonne
+> (SUM transport cost / SUM tonnes) for that state-commodity combination.
+""", section=False)
+
+            _hm_comms  = [_r["commodity_key"] for _r in _ov_rows[:15]]
+            _hm_states = sorted(state_filter) if state_filter else sorted(
+                {k[0] for k in _sc_data.keys()}
+            )
+            _hm_labels = [_fmt_commodity(k) for k in _hm_comms]
+
+            _z = []
+            for _ck in _hm_comms:
+                _row = [_sc_data.get((_st, _ck), {}).get(rank_field, 0.0) for _st in _hm_states]
+                _z.append(_row)
+
+            fig_nc2 = go.Figure(go.Heatmap(
+                z=_z,
+                x=_hm_states,
+                y=_hm_labels,
+                colorscale="Blues",
+                hovertemplate=(
+                    "<b>%{y}</b><br>State: %{x}<br>"
+                    f"{axis_label}: %{{z:{fmt_str}}}<extra></extra>"
+                ),
+            ))
+            fig_nc2.update_layout(
+                **_PLOTLY_LAYOUT,
+                xaxis_title="Origin State",
+                yaxis=dict(autorange="reversed"),
+                height=max(300, len(_hm_comms) * 28 + 80),
+                margin=dict(l=10, r=10, t=10, b=10),
+            )
+            st.plotly_chart(fig_nc2, use_container_width=True)
+            st.caption(
+                f"Top 15 commodities by total {rank_metric}. "
+                "White cells indicate no data for that state-commodity pair."
+            )
+
+    st.markdown("<div style='margin-top:16px;'></div>", unsafe_allow_html=True)
 
 # Bottom back links
 col_back1b, _ = st.columns([1, 6])
