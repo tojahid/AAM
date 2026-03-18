@@ -345,6 +345,7 @@ def _load_commodity_summary_l3_filtered(
     commodity_filter: frozenset | None,
     orig_lga: str | None = None,
     orig_state_arg: str | None = None,
+    state_filter: frozenset | None = None,
 ) -> tuple[list[dict], str | None]:
     """
     Aggregate Level 3 local data PER COMMODITY NAME (not per OD pair).
@@ -385,6 +386,8 @@ def _load_commodity_summary_l3_filtered(
         for state_dir in sorted(LOCAL_DATA_ROOT_L3.iterdir()):
             if state_dir.is_dir():
                 json_files.extend(sorted(state_dir.glob("*.json")))
+        if state_filter:
+            json_files = [f for f in json_files if f.parent.name in state_filter]
 
     accum: dict[str, dict] = {}
 
@@ -444,6 +447,7 @@ def _cached_commodity_summary(
     commodity_filter_frozen: frozenset | None,
     orig_lga: str | None = None,
     orig_state_arg: str | None = None,
+    state_filter_frozen: frozenset = frozenset(),
 ) -> tuple[list[dict], str | None]:
     """Cached wrapper for _load_commodity_summary_l3_filtered."""
     return _load_commodity_summary_l3_filtered(
@@ -451,6 +455,7 @@ def _cached_commodity_summary(
         commodity_filter_frozen,
         orig_lga=orig_lga,
         orig_state_arg=orig_state_arg,
+        state_filter=state_filter_frozen or None,
     )
 
 
@@ -513,6 +518,7 @@ def _load_commodity_od_corridors_l3_filtered(
     commodity_filter: frozenset | None,
     orig_lga: str | None = None,
     orig_state_arg: str | None = None,
+    state_filter: frozenset | None = None,
 ) -> tuple[dict[str, list[dict]], str | None]:
     """
     Aggregate Level 3 local data per (commodity_key, orig_lga, dest_lga) triple.
@@ -536,6 +542,8 @@ def _load_commodity_od_corridors_l3_filtered(
         for state_dir in sorted(LOCAL_DATA_ROOT_L3.iterdir()):
             if state_dir.is_dir():
                 json_files.extend(sorted(state_dir.glob("*.json")))
+        if state_filter:
+            json_files = [f for f in json_files if f.parent.name in state_filter]
 
     # accum: {commodity_key: {(orig_lga, dest_lga): corridor_dict}}
     accum: dict[str, dict[tuple, dict]] = {}
@@ -597,6 +605,7 @@ def _cached_commodity_od_corridors(
     commodity_filter_frozen: frozenset | None,
     orig_lga: str | None = None,
     orig_state_arg: str | None = None,
+    state_filter_frozen: frozenset = frozenset(),
 ) -> tuple[dict[str, list[dict]], str | None]:
     """Cached wrapper for _load_commodity_od_corridors_l3_filtered."""
     return _load_commodity_od_corridors_l3_filtered(
@@ -604,6 +613,7 @@ def _cached_commodity_od_corridors(
         commodity_filter_frozen,
         orig_lga=orig_lga,
         orig_state_arg=orig_state_arg,
+        state_filter=state_filter_frozen or None,
     )
 
 
@@ -1395,6 +1405,7 @@ whether Beef, Chicken, Fish or Lamb dominates by volume.
             _comm_rows, _comm_err = _cached_commodity_summary(
                 industry_filter, commodity_filter,
                 orig_lga=None, orig_state_arg=None,
+                state_filter_frozen=frozenset(state_filter) if state_filter else frozenset(),
             )
         else:
             _comm_rows, _comm_err = _cached_commodity_summary(
@@ -1777,6 +1788,7 @@ sorted by **{rank_metric}**.
                 _corr_data, _corr_err = _cached_commodity_od_corridors(
                     industry_filter, commodity_filter,
                     orig_lga=None, orig_state_arg=None,
+                    state_filter_frozen=frozenset(state_filter) if state_filter else frozenset(),
                 )
             else:
                 _corr_data, _corr_err = _cached_commodity_od_corridors(
@@ -1857,17 +1869,43 @@ def bar_colors(dest_lgas: list[str]) -> list[str]:
 if is_national:
 
     # ── B1 — National Summary Cards ──────────────────────────────────────
-    chart_header("National Summary", """
+    chart_header("National Summary", f"""
 **National Summary Cards**
 
 Aggregated totals across all OD corridors loaded from the Level 3 local data cache.
 
 Values update when you apply **State**, **Industry Group**, or **Commodity** filters.
 
-> **Median Cost/Tonne** is the unweighted median across all corridors (each corridor counted equally regardless of freight volume).
+| Card | What it shows |
+|---|---|
+| OD Corridors | Total number of origin \u2192 destination routes with data |
+| Total Tonnes | Sum of annual tonnes across all corridors |
+| Median {rank_metric} | Unweighted median — each corridor counts equally regardless of volume |
+| Total CO\u2082 | Sum of annual CO\u2082 emissions across all corridors |
+| Origins with Data | Number of distinct origin LGAs with at least one corridor |
+
+> **Median {rank_metric}** may show $0.00 or 0 when many corridors have no data for the
+> selected commodity (suppressed by CSIRO below ~5 movements). This is expected.
 
 > **Tip:** Use the Download panel above to fetch Level 3 data for a state before ranking.
 """)
+
+    # ── B1 third card: dynamic label + value based on rank_metric ──────────
+    if rank_field == "cost_per_tonne":
+        _b1_label = "Median Cost/Tonne"
+        _b1_val   = f"${df['cost_per_tonne'].median():,.2f}"
+    elif rank_field == "tonnes":
+        _b1_label = "Median Tonnes"
+        _b1_val   = f"{df['tonnes'].median():,.0f} t"
+    elif rank_field == "co2":
+        _b1_label = "Median CO\u2082 (t)"
+        _b1_val   = f"{df['co2'].median():,.1f} t"
+    elif rank_field == "trips":
+        _b1_label = "Median Trips"
+        _b1_val   = f"{df['trips'].median():,.0f}"
+    else:  # transport_cost
+        _b1_label = "Median Transport Cost"
+        _b1_val   = f"${df['transport_cost'].median():,.0f}"
 
     sc1, sc2, sc3, sc4, sc5 = st.columns(5)
     with sc1:
@@ -1875,7 +1913,7 @@ Values update when you apply **State**, **Industry Group**, or **Commodity** fil
     with sc2:
         st.metric("Total Tonnes", f"{df['tonnes'].sum():,.0f} t")
     with sc3:
-        st.metric("Median Cost/Tonne", f"${df['cost_per_tonne'].median():,.2f}")
+        st.metric(_b1_label, _b1_val)
     with sc4:
         st.metric("Total CO\u2082", f"{df['co2'].sum():,.1f} t")
     with sc5:
@@ -1973,52 +2011,71 @@ Change the metric using the **Rank By** selector in the sidebar.
     st.markdown("<div style='margin-top:28px;'></div>", unsafe_allow_html=True)
 
     # ── B3 — Top Origins / Top Destinations ──────────────────────────────
-    chart_header("Top Origins & Top Destinations", """
+    chart_header("Top Origins & Top Destinations", f"""
 **Top Origins & Top Destinations**
 
-**Left** — Top 10 origin LGAs by total outbound tonnes. **Right** — Top 10 destination LGAs by total inbound tonnes.
+**Left** — Top 10 origin LGAs by total outbound **{rank_metric}**.
+**Right** — Top 10 destination LGAs by total inbound **{rank_metric}**.
 
-Both charts reflect the active commodity and industry group filters.
+Both charts respond to the **Rank By** selector and any active commodity or industry filter.
 
-> **Data caveat — Top Destinations:** Inbound tonnes counted only from downloaded origins.
+> **Data caveat — Top Destinations:** Inbound values counted only from downloaded origins.
+> Destinations receiving freight from un-downloaded states may appear lower than expected.
 """)
 
     b3_col1, b3_col2 = st.columns(2)
 
+    # ── Helper: aggregate by rank_field, handling cost_per_tonne as a ratio ──
+    def _b3_agg(group_cols: list[str], val_col: str) -> tuple:
+        """Return (df_top10, list_of_values) aggregated by rank_field."""
+        if rank_field == "cost_per_tonne":
+            _agg = (
+                df.groupby(group_cols)
+                .agg(_tc=("transport_cost", "sum"), _t=("tonnes", "sum"))
+                .reset_index()
+            )
+            _agg["_rank_val"] = _agg["_tc"] / _agg["_t"].replace(0, float("nan"))
+            _top = _agg.nlargest(10, "_rank_val")
+            return _top, _top["_rank_val"].tolist()
+        else:
+            _agg = df.groupby(group_cols)[rank_field].sum().reset_index()
+            _top = _agg.nlargest(10, rank_field)
+            return _top, _top[rank_field].tolist()
+
     with b3_col1:
-        _top_orig = (
-            df.groupby(["orig_lga", "orig_name", "orig_state"])["tonnes"]
-            .sum().reset_index().nlargest(10, "tonnes")
+        _top_orig, _orig_vals = _b3_agg(
+            ["orig_lga", "orig_name", "orig_state"], rank_field
         )
         fig_b3a = go.Figure(go.Bar(
-            x=_top_orig["tonnes"].tolist(),
+            x=_orig_vals,
             y=[f"{n} ({s})" for n, s in zip(_top_orig["orig_name"], _top_orig["orig_state"])],
             orientation="h",
             marker_color=[STATE_COLORS.get(s, "#4B5563") for s in _top_orig["orig_state"]],
-            hovertemplate="<b>%{y}</b><br>Outbound Tonnes: %{x:,.0f}<extra></extra>",
+            hovertemplate=f"<b>%{{y}}</b><br>Outbound {axis_label}: %{{x:{fmt_str}}}<extra></extra>",
         ))
         fig_b3a.update_layout(
-            **_PLOTLY_LAYOUT, title_text="Top 10 Origins (outbound tonnes)", title_font_size=13,
-            xaxis_title="Tonnes", yaxis_autorange="reversed",
+            **_PLOTLY_LAYOUT,
+            title_text=f"Top 10 Origins (outbound {rank_metric.lower()})", title_font_size=13,
+            xaxis_title=axis_label, yaxis_autorange="reversed",
             height=380, margin=dict(l=10, r=10, t=40, b=10), showlegend=False,
         )
         st.plotly_chart(fig_b3a, use_container_width=True)
 
     with b3_col2:
-        _top_dest = (
-            df.groupby(["dest_lga", "dest_name", "dest_state"])["tonnes"]
-            .sum().reset_index().nlargest(10, "tonnes")
+        _top_dest, _dest_vals = _b3_agg(
+            ["dest_lga", "dest_name", "dest_state"], rank_field
         )
         fig_b3b = go.Figure(go.Bar(
-            x=_top_dest["tonnes"].tolist(),
+            x=_dest_vals,
             y=[f"{n} ({s})" for n, s in zip(_top_dest["dest_name"], _top_dest["dest_state"])],
             orientation="h",
             marker_color=[STATE_COLORS.get(s, "#4B5563") for s in _top_dest["dest_state"]],
-            hovertemplate="<b>%{y}</b><br>Inbound Tonnes: %{x:,.0f}<extra></extra>",
+            hovertemplate=f"<b>%{{y}}</b><br>Inbound {axis_label}: %{{x:{fmt_str}}}<extra></extra>",
         ))
         fig_b3b.update_layout(
-            **_PLOTLY_LAYOUT, title_text="Top 10 Destinations (inbound tonnes)", title_font_size=13,
-            xaxis_title="Tonnes", yaxis_autorange="reversed",
+            **_PLOTLY_LAYOUT,
+            title_text=f"Top 10 Destinations (inbound {rank_metric.lower()})", title_font_size=13,
+            xaxis_title=axis_label, yaxis_autorange="reversed",
             height=380, margin=dict(l=10, r=10, t=40, b=10), showlegend=False,
         )
         st.plotly_chart(fig_b3b, use_container_width=True)
@@ -2308,7 +2365,7 @@ Dot size proportional to annual tonnes — larger dots move more freight.
             showlegend=False, height=380, margin=dict(l=10, r=10, t=20, b=10),
         )
         st.plotly_chart(fig_r3, use_container_width=True)
-        st.caption("Cost vs emissions trade-off. Dot size \u221d tonnes.")
+        st.caption("Cost vs emissions trade-off. Dot size proportional to annual tonnes.")
 
 st.markdown("<div style='margin-top:24px;'></div>", unsafe_allow_html=True)
 

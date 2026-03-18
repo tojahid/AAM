@@ -653,9 +653,6 @@ It appears exclusively when the Commodity Filter sidebar is active and data sour
 to handle stale `@st.cache_data` results computed before `freight_value` was added to
 the accumulator. This prevents `KeyError` on first run after a code update.
 
-### Files modified
-- `streamlit_cloud_app_csiro_freight/pages/Commodity_OD_Rankings.py` — 1710 → 2408 lines
-- `streamlit_cloud_app_csiro_freight/CLAUDE.md` — updated (this file)
 
-### New folder created
-- `streamlit_cloud_app_csiro_freight_v2/` — independent copy of the full app for separate deployment
+
+
