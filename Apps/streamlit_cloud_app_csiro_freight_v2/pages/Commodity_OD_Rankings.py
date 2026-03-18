@@ -1690,7 +1690,7 @@ Bars sorted highest to lowest. Hover to see absolute freight value and transport
 """, section=False)
 
         _ci_vcr = [
-            {**r, "value_cost_ratio": r["freight_value"] / r["transport_cost"]
+            {**r, "value_cost_ratio": r.get("freight_value", 0.0) / r["transport_cost"]
              if r["transport_cost"] > 0 else 0.0}
             for r in _comm_rows
         ]
@@ -1719,7 +1719,7 @@ Bars sorted highest to lowest. Hover to see absolute freight value and transport
                 "Freight Value: $%{customdata[0]:,.0f}<br>"
                 "Transport Cost: $%{customdata[1]:,.0f}<extra></extra>"
             ),
-            customdata=[[r["freight_value"], r["transport_cost"]] for r in _ci_vcr],
+            customdata=[[r.get("freight_value", 0.0), r["transport_cost"]] for r in _ci_vcr],
         ))
         fig_vcr.update_layout(
             **_PLOTLY_LAYOUT,

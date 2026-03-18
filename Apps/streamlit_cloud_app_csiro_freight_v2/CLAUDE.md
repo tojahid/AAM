@@ -21,26 +21,29 @@ streamlit run CSIRO_TraNSIT_Dashboard.py
 ## Folder Structure
 
 ```
-streamlit_cloud_app_csiro_freight/       ← THIS IS THE ACTIVE DEPLOYMENT FOLDER
-├── CSIRO_TraNSIT_Dashboard.py           ← Page 1: OD Metrics + Charts (1081 lines)
-├── pages/
-│   └── Commodity_OD_Rankings.py         ← Page 2: Commodity Rankings (1710 lines)
-├── api.py                               ← All API client + local data loader functions (418 lines)
-├── lga_codes.py                         ← 514 Australian LGAs (names, codes, states)
-├── downloader.py                        ← Background download engine for local data
-├── requirements.txt                     ← streamlit>=1.35.0, pandas>=2.0.0, plotly>=5.0.0
-└── api_local_data/                      ← Pre-downloaded local data (already populated)
-    ├── level2/                          ← Industry-group data (groupBy_l2=true)
-    │   ├── VIC/LGA_24600.json           ← One JSON file per origin LGA
-    │   ├── NSW/...
-    │   └── <STATE>/...
-    └── level3/                          ← Individual commodity data (groupBy_l2=false)
-        ├── VIC/LGA_24600.json
-        └── <STATE>/...
+csiro_transit_freight_od_explorer/
+├── streamlit_cloud_app_csiro_freight_v2/       ← Active development folder
+│   ├── CSIRO_TraNSIT_Dashboard.py           ← Page 1: OD Metrics + Charts (1081 lines)
+│   ├── pages/
+│   │   └── Commodity_OD_Rankings.py         ← Page 2: Commodity Rankings (2408 lines)
+│   ├── api.py                               ← All API client + local data loaders (418 lines)
+│   ├── lga_codes.py                         ← 514 Australian LGAs (names, codes, states)
+│   ├── downloader.py                        ← Background download engine for local data
+│   ├── requirements.txt                     ← streamlit>=1.35.0, pandas>=2.0.0, plotly>=5.0.0
+│   ├── CLAUDE.md                            ← This file
+│   └── api_local_data/                      ← Pre-downloaded local data (already populated)
+│       ├── level2/                          ← Industry-group data (groupBy_l2=true)
+│       │   ├── VIC/LGA_24600.json           ← One JSON file per origin LGA
+│       │   └── <STATE>/...
+│       └── level3/                          ← Individual commodity data (groupBy_l2=false)
+│           ├── VIC/LGA_24600.json
+│           └── <STATE>/...
+
 ```
 
-The parent folder also has `app_with_visualisation/` — an older reference version. Do NOT
-modify it. The active working folder is `streamlit_cloud_app_csiro_freight/`.
+The active working folder is `streamlit_cloud_app_csiro_freight/`.
+`streamlit_cloud_app_csiro_freight_v2/` is an independent copy for separate deployment.
+Do NOT modify `app_with_visualisation/`.
 
 ---
 
@@ -144,7 +147,7 @@ Exposes individual commodity names (e.g. Beer, Wheat, Barramundi, PBS Medicines)
 | ⚙️ User-Defined Groups | 📂 By Sector | Curated sectors: beverage, cold_food, general, health, horticulture |
 | ⚙️ User-Defined Groups | 🏷️ By Industry | Curated industries: alcohol_beverage, dairy_product, fruit, meat, medicines, seafood, etc. |
 
-**User-Defined Groups** (Dorian's custom curated commodity subsets):
+**User-Defined Groups** (custom curated commodity subsets):
 ```python
 _SECTOR_DICT = {
     "beverage":     ["liquor", "wine"],
@@ -176,6 +179,8 @@ _INDUSTRY_DICT = {
 - Route header, back link to Page 1
 - **📥 Update / Download Local Data** collapsible expander (not needed — data already downloaded)
 - Data source info note
+- **🔬 Commodity Filter Insights** section — appears only when a Commodity Filter is active
+  (see full section description below)
 
 ### Charts — National Scope
 - **B1** Summary Cards — OD Corridors, Total Tonnes, Median Cost/Tonne, Total CO₂, Origins with Data
@@ -193,6 +198,156 @@ _INDUSTRY_DICT = {
 - **B7** Freight Value vs Tonnes scatter — orange = selected dest, grey = others
 - **R3** CO₂ vs Transport Cost scatter — orange = selected dest, grey = others
 - **R4** Full Rankings Table + CSV download
+
+---
+
+## Commodity Filter Insights Section (Page 2)
+
+**Trigger:** Appears only when a Commodity Filter is active AND data source is Local Data
+(`if (industry_filter or commodity_filter) and not is_online`).
+
+**Position:** Between the data source info note and the main ranking charts (B1/R1 etc.).
+
+**Scope:** National reads all state JSON files; Single Origin reads only the selected
+origin's JSON file.
+
+**Data source:** `_cached_commodity_summary()` → `_load_commodity_summary_l3_filtered()`
+which aggregates raw Level 3 JSON records **per commodity name** (not per OD pair),
+preserving the `commodity`/`industry`/`sector` fields that `_compute_totals()` discards.
+
+### Layout
+
+```
+🔬 COMMODITY FILTER INSIGHTS  [ⓘ▾]
+┌──────────────┬──────────────┬──────────────┬──────────────┐
+│ Commodities  │ Total Tonnes │ Avg Cost/t   │ Total CO₂    │  ← 4 metric cards
+└──────────────┴──────────────┴──────────────┴──────────────┘
+[Chart A: Commodity Share by Tonnes] │ [Chart B: Cost vs Volume Scatter]
+──────────────────────────────────────────────────────────────
+[Chart 1: Multi-Metric Comparison Table — full width]
+[Chart 2: Freight Value-to-Cost Ratio bar — full width]
+[Chart 3: Top 10 OD Corridors by Commodity — tabbed, full width]
+──────────────────────────────────────────────────────────────
+```
+
+### Component Details
+
+**4 Summary Metric Cards** (`st.columns(4)`):
+- Commodities Matched — count of distinct commodity types in filter
+- Total Tonnes — SUM of annual tonnes across all OD corridors in scope
+- Avg Cost / Tonne — `SUM(transport_cost) / SUM(tonnes)`, volume-weighted
+- Total CO₂ — SUM of annual CO₂ (tonnes) across all corridors
+
+**Chart A — Commodity Share by Tonnes** (`section=False`, left column):
+- `go.Bar(orientation="h")`, sorted by tonnes desc, max 20 bars
+- Bar colour = `_INDUSTRY_COLORS[industry]` (25-entry dict, see Design System)
+- `hovertemplate`: tonnes + weighted avg cost per tonne
+- `yaxis=dict(autorange="reversed")` so highest bar is at top
+- `height=max(300, len(top20) * 26 + 60)` — scales with row count
+- HTML colour chip legend below chart, one chip per industry in the chart
+
+**Chart B — Cost vs Volume by Commodity** (`section=False`, right column):
+- `go.Scatter(mode="markers+text")`, X=tonnes, Y=cost_per_tonne
+- Marker size ∝ CO₂: `max(8, min(40, co2/max_co2 * 40))`
+- Marker colour = `_INDUSTRY_COLORS[industry]`
+- `hovertemplate`: commodity, tonnes, cost/tonne, CO₂, trips
+- Only rendered when `len(_comm_rows) >= 2`; shows `st.info()` for single commodity
+- `st.caption()` below: "Dot size ∝ CO₂ · Coloured by industry group · Hover for full metrics"
+
+**Chart 1 — Multi-Metric Commodity Comparison** (full width, `section=False`):
+- `st.dataframe()` with formatted columns:
+  - Commodity, Industry, Tonnes, Cost/Tonne ($), CO₂/Tonne (kg), Load Factor (t/trip), OD Pairs, Total CO₂ (t)
+- Pinned **TOTAL / WEIGHTED AVG** row at bottom
+- `st.download_button` → `commodity_comparison.csv`
+
+**Chart 2 — Freight Value-to-Cost Ratio** (full width, `section=False`):
+- `go.Bar(orientation="h")`, X = `freight_value / transport_cost` ratio
+- Sorted highest to lowest (highest ratio = top bar)
+- Colour gradient: amber `rgba(217,119,6,0.85)` → green `rgba(16,185,129,0.85)` by ratio
+- `hovertemplate`: ratio, absolute freight value, absolute transport cost
+- `st.caption()`: "Green = high-value freight · Amber = lower-margin / bulk freight"
+- Requires `freight_value` field in `_comm_rows` (added to accumulator)
+
+**Chart 3 — Top 10 OD Corridors by Commodity** (full width, `section=False`):
+- Uses `_cached_commodity_od_corridors()` → `_load_commodity_od_corridors_l3_filtered()`
+- UI: `st.tabs()` for ≤8 commodities; `st.selectbox()` for >8
+- Each tab/selection calls `_render_corridor_bar(corridors, comm_key)`
+  - `go.Bar(orientation="h")` showing top 10 corridors sorted by tonnes desc
+  - Bar label: `"{orig_name} → {dest_name}"`
+  - Bar colour = `STATE_COLORS[dest_state]` (destination state)
+  - `hovertemplate`: tonnes, cost/tonne, CO₂
+  - HTML state colour chip legend below chart
+
+---
+
+## Internal Functions — Page 2 (`Commodity_OD_Rankings.py`)
+
+### Per-commodity summary loader (new)
+
+```python
+def _load_commodity_summary_l3_filtered(
+    industry_filter, commodity_filter, orig_lga=None, orig_state_arg=None
+) -> tuple[list[dict], str | None]:
+    """
+    Aggregate Level 3 JSON per COMMODITY NAME (not per OD pair).
+    Returns list of dicts sorted by tonnes desc, each with:
+        commodity_key, commodity_display, industry, sector,
+        tonnes, transport_cost, freight_value, co2, trips, od_pairs, cost_per_tonne
+    """
+
+@st.cache_data(show_spinner=False)
+def _cached_commodity_summary(
+    industry_filter_frozen, commodity_filter_frozen,
+    orig_lga=None, orig_state_arg=None
+) -> tuple[list[dict], str | None]:
+    """Cached wrapper for _load_commodity_summary_l3_filtered."""
+```
+
+### Per-commodity corridor loader (new)
+
+```python
+def _load_commodity_od_corridors_l3_filtered(
+    industry_filter, commodity_filter, orig_lga=None, orig_state_arg=None
+) -> tuple[dict[str, list[dict]], str | None]:
+    """
+    Aggregate Level 3 JSON per (commodity_key, orig_lga, dest_lga) triple.
+    Returns {commodity_key: [top10 corridor dicts sorted by tonnes desc]}.
+    Each corridor dict: orig_lga, dest_lga, orig_name, dest_name,
+                        orig_state, dest_state, tonnes, transport_cost,
+                        cost_per_tonne, co2, trips
+    """
+
+@st.cache_data(show_spinner=False)
+def _cached_commodity_od_corridors(
+    industry_filter_frozen, commodity_filter_frozen,
+    orig_lga=None, orig_state_arg=None
+) -> tuple[dict[str, list[dict]], str | None]:
+    """Cached wrapper for _load_commodity_od_corridors_l3_filtered."""
+```
+
+### Corridor bar renderer helper (new)
+
+```python
+def _render_corridor_bar(corridors: list[dict], comm_key: str) -> None:
+    """Render a Top-10 OD corridor horizontal bar chart for one commodity.
+    Called inside each st.tab or after st.selectbox for Chart 3."""
+```
+
+### Existing filtered loaders
+
+```python
+# Returns flat list of OD pair rows (tonnes, cost_per_tonne, co2, trips, avg_distance)
+_load_all_od_pairs_l3_filtered(industry_filter, commodity_filter) → (rows, error)
+_load_local_origin_l3_filtered(orig_lga, orig_state, industry_filter, commodity_filter) → (rows, error)
+
+# Cached wrappers
+_cached_od_pairs_l3(industry_filter_frozen, commodity_filter_frozen) → (rows, error)
+_cached_local_origin_l3(orig_lga, orig_state, industry_filter_frozen, commodity_filter_frozen) → (rows, error)
+```
+
+**Key distinction:** The existing filtered loaders call `_compute_totals()` which loses the
+`commodity`/`industry`/`sector` fields. The new `_load_commodity_summary_l3_filtered()`
+accumulates raw fields per commodity key before aggregating, preserving those fields.
 
 ---
 
@@ -271,7 +426,7 @@ load_local_origin_data_l3(orig_lga, orig_state) → ({dest_lga: totals}, error)
 load_all_od_pairs_l3()                          → ([...], error)
 
 # Level 3 with filtering (used in Page 2)
-_load_all_od_pairs_l3_filtered(industry_filter: frozenset|None, commodity_filter: frozenset|None)
+_load_all_od_pairs_l3_filtered(industry_filter, commodity_filter)
 _load_local_origin_l3_filtered(orig_lga, orig_state, industry_filter, commodity_filter)
 ```
 
@@ -332,6 +487,40 @@ get_progress_l3()  → DownloadProgress singleton
 
 Sidebar: background `#1E3A5F`, text `#C8DAF0`, dividers `#2E5A8C`
 
+### `_INDUSTRY_COLORS` dict (Page 2 only, 25 entries)
+
+Maps industry keys from Level 3 data to hex colours. Defined inside the Commodity Filter
+Insights `else:` block. Key semantics:
+
+| Industry | Colour |
+|---|---|
+| food | `#10B981` (green) |
+| livestock | `#F97316` (orange) |
+| medicines | `#DC2626` (red) |
+| vehicles | `#4F46E5` (indigo) |
+| waste | `#9CA3AF` (grey) |
+| seafood | `#0D9488` (teal) |
+| beverage / alcohol_beverage | `#2563EB` / `#1D4ED8` (blue) |
+| fuel | `#D97706` (amber) |
+| viticulture | `#7C3AED` (purple) |
+| grains | `#A16207` (dark amber) |
+| meat | `#EF4444` (light red) |
+| dairy_product | `#0EA5E9` (sky blue) |
+| fruit | `#F59E0B` (yellow-amber) |
+| vegetables | `#16A34A` (dark green) |
+| horticulture | `#34D399` (light green) |
+| chemicals | `#6B7280` (grey) |
+| fibre | `#A3E635` (lime) |
+| sugar | `#FCD34D` (yellow) |
+| wood_product | `#92400E` (brown) |
+| nuts | `#78350F` (dark brown) |
+| tissue_product | `#BAE6FD` (light blue) |
+| ppe | `#E879F9` (pink) |
+| household_general | `#6B7280` (grey) |
+| other_retail_ess | `#9CA3AF` (light grey) |
+
+Fallback for unknown keys: `_BLUE`.
+
 ### Plotly Layout (Page 1)
 ```python
 _PLOTLY_LAYOUT = dict(
@@ -342,7 +531,7 @@ _PLOTLY_LAYOUT = dict(
     plot_bgcolor="rgba(0,0,0,0)",
 )
 ```
-Page 2 omits `margin` from layout and sets it per-chart.
+Page 2 omits `margin` from `_PLOTLY_LAYOUT` and sets it per-chart.
 
 ### `chart_header()` Helper (defined in both files)
 ```python
@@ -368,6 +557,7 @@ def chart_header(title: str, info_md: str, section: bool = True) -> None:
 | `dest_lga_name` | Page 1 sidebar | Page 1 | Persist dest across rerenders |
 | `l3_orig_state` | Page 2 sidebar | Page 2 | Origin state on Page 2 |
 | `l3_orig_lga_name` | Page 2 sidebar | Page 2 | Origin LGA on Page 2 |
+| `comm_corr_select` | Page 2 body | Page 2 | Selectbox key for Chart 3 corridor tab (>8 commodities) |
 
 ---
 
@@ -386,10 +576,17 @@ def chart_header(title: str, info_md: str, section: bool = True) -> None:
 - **A3 Transport Cost Breakdown:** Displays total annual AUD (not cost per tonne).
 - **B1 Median Cost/Tonne:** Unweighted per-corridor median, not volume-weighted.
 - **Commodity filter disabled in Online mode:** Requires Local Data to apply filters.
+- **Commodity Filter Insights disabled in Online mode:** Entire section guarded by
+  `not is_online` — no per-commodity data available from densitymap endpoint.
+- **Stale Streamlit cache + new fields:** `_cached_commodity_summary` may return old
+  dicts without `freight_value` after a code update. All Chart 2 accesses use
+  `r.get("freight_value", 0.0)` to handle this gracefully.
 - **Local data already downloaded:** All 8 states populated in `api_local_data/`. The
   📥 Download panel exists but users should not need it.
 - **Commodity normalization:** `_normalize("Cream Yoghurt") → "cream_yoghurt"` —
   commodity names from API are title-case; local dict keys are snake_case.
+- **`_render_corridor_bar` defined before `_PLOTLY_LAYOUT`:** Safe — Python resolves
+  global names at function call time, not definition time.
 
 ---
 
@@ -418,3 +615,47 @@ plotly>=5.0.0
 
 No external data files required for Page 1 (live API). Page 2 requires local data
 in `api_local_data/` — already downloaded, do not delete.
+
+---
+
+## Recent Changes — Commodity Filter Insights (Last Session)
+
+### What was added
+
+A new **Commodity Filter Insights** section was added to Page 2 (`Commodity_OD_Rankings.py`).
+It appears exclusively when the Commodity Filter sidebar is active and data source is Local Data.
+
+**New functions added to `Commodity_OD_Rankings.py`:**
+
+| Function | Purpose |
+|---|---|
+| `_load_commodity_summary_l3_filtered()` | Aggregate raw L3 records per commodity key (not per OD pair), accumulating tonnes, transport_cost, freight_value, co2, trips, od_pairs |
+| `_cached_commodity_summary()` | `@st.cache_data` wrapper for above |
+| `_load_commodity_od_corridors_l3_filtered()` | Aggregate per (commodity, orig_lga, dest_lga) triple; return top-10 corridors per commodity |
+| `_cached_commodity_od_corridors()` | `@st.cache_data` wrapper for above |
+| `_render_corridor_bar()` | Reusable helper: draws one horizontal bar chart for a commodity's top-10 corridors, coloured by destination state |
+
+**`_load_commodity_summary_l3_filtered` accumulator fields:**
+`commodity_key, commodity_display, industry, sector, tonnes, transport_cost, freight_value, co2, trips, od_pairs, cost_per_tonne`
+
+**Charts added inside the Commodity Filter Insights `else:` block:**
+
+| Chart | Type | Width | Description |
+|---|---|---|---|
+| 4 Metric Cards | `st.metric` | full | Commodities Matched, Total Tonnes, Avg Cost/Tonne, Total CO₂ |
+| **Chart A** | Horizontal bar | half | Commodity Share by Tonnes — coloured by industry, max 20, with colour chip legend |
+| **Chart B** | Scatter | half | Cost vs Volume — dot size ∝ CO₂, colour by industry, requires ≥2 commodities |
+| **Chart 1** | `st.dataframe` | full | Multi-Metric Comparison: all 6 metrics per commodity + TOTAL row + CSV download |
+| **Chart 2** | Horizontal bar | full | Freight Value-to-Cost Ratio — amber→green gradient, sorted by ratio |
+| **Chart 3** | Tabbed bars | full | Top 10 OD Corridors per Commodity — `st.tabs` (≤8) or `st.selectbox` (>8), bars coloured by destination state |
+
+**Bug fix applied:** Chart 2 uses `r.get("freight_value", 0.0)` (not `r["freight_value"]`)
+to handle stale `@st.cache_data` results computed before `freight_value` was added to
+the accumulator. This prevents `KeyError` on first run after a code update.
+
+### Files modified
+- `streamlit_cloud_app_csiro_freight/pages/Commodity_OD_Rankings.py` — 1710 → 2408 lines
+- `streamlit_cloud_app_csiro_freight/CLAUDE.md` — updated (this file)
+
+### New folder created
+- `streamlit_cloud_app_csiro_freight_v2/` — independent copy of the full app for separate deployment
