@@ -15,7 +15,7 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from utils import chart_header
+from utils import chart_header, ensure_gdrive_file
 
 import pandas as pd
 import plotly.express as px
@@ -27,12 +27,17 @@ import streamlit as st
 # ---------------------------------------------------------------------------
 APP_DIR      = Path(__file__).parent
 OUTPUT_DIR   = APP_DIR.parent / "output"
-CSV_PATH     = OUTPUT_DIR / "trips_50MB.csv"
+CSV_PATH     = OUTPUT_DIR / "trips_20GB.csv"
 PARQUET_PATH = OUTPUT_DIR / "trips.parquet"
 
 LARGE_FILE_THRESHOLD    = 500 * 1024 * 1024
 SAMPLE_ROWS             = 500_000
 DOWNLOAD_SIZE_THRESHOLD = 150 * 1024 * 1024
+
+# Google Drive file ID for trips_20GB.csv
+# Share the file: Drive → right-click → Share → Anyone with link (Viewer)
+# Copy the ID from: https://drive.google.com/file/d/FILE_ID_HERE/view
+GDRIVE_CSV_FILE_ID = "10VyJntKo9EZKX6-_N_PiNfLgtLMHlOI-"
 
 DOW_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
@@ -142,17 +147,30 @@ with st.sidebar:
 
     data_path = CSV_PATH if data_source == "CSV" else PARQUET_PATH
 
-    if not data_path.exists():
-        st.error(f"File not found: `{data_path}`\n\nRun the pipeline first to generate the output.")
+# ---------------------------------------------------------------------------
+# Resolve data path — download from Google Drive for CSV if not present locally
+# ---------------------------------------------------------------------------
+if data_source == "CSV" and not data_path.exists():
+    if not GDRIVE_CSV_FILE_ID:
+        st.error(
+            "trips_20GB.csv not found in `output/` and no Google Drive file ID is set.\n\n"
+            "Set `GDRIVE_CSV_FILE_ID` at the top of this file."
+        )
         st.stop()
+    resolved_path = ensure_gdrive_file("trips_20GB.csv", GDRIVE_CSV_FILE_ID, OUTPUT_DIR)
+elif data_source == "Parquet" and not data_path.exists():
+    st.error(f"File not found: `{data_path}`\n\nAdd trips.parquet to the `output/` folder.")
+    st.stop()
+else:
+    resolved_path = data_path
 
 # ---------------------------------------------------------------------------
 # Load
 # ---------------------------------------------------------------------------
-_file_size = data_path.stat().st_size
+_file_size = resolved_path.stat().st_size
 _size_str  = f"{_file_size / 1e9:.1f} GB"
 with st.spinner(f"Sampling {SAMPLE_ROWS:,} rows from {_size_str} {data_source} file…"):
-    df_full = load_csv(CSV_PATH, SAMPLE_ROWS) if data_source == "CSV" else load_parquet(PARQUET_PATH, SAMPLE_ROWS)
+    df_full = load_csv(resolved_path, SAMPLE_ROWS) if data_source == "CSV" else load_parquet(resolved_path, SAMPLE_ROWS)
 
 # ---------------------------------------------------------------------------
 # Derive LGA centroids from data
@@ -734,9 +752,9 @@ for _k in ("od_export_path", "od_export_rows", "od_export_bytes", "od_export_nam
 if st.button("⚙️ Prepare full corridor export", use_container_width=True):
     with st.spinner(f"Reading full {data_source} file and computing corridors — may take a few minutes…"):
         _dfe = (
-            load_csv(CSV_PATH, nrows=None)
+            load_csv(resolved_path, nrows=None)
             if data_source == "CSV"
-            else load_parquet(PARQUET_PATH, nrows=None)
+            else load_parquet(resolved_path, nrows=None)
         )
         _dfe = _dfe[(_dfe["date"] >= date_start) & (_dfe["date"] <= date_end)]
         if region_sel:

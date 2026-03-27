@@ -5,6 +5,7 @@ CSS injection, HTML builders, formatters, data loaders, color constants.
 
 import os
 import re
+import tempfile as _tempfile
 
 import pandas as pd
 import streamlit as st
@@ -237,6 +238,48 @@ def safe_filename(text: str) -> str:
 
 def to_csv_bytes(df: pd.DataFrame) -> bytes:
     return df.to_csv(index=False).encode("utf-8")
+
+
+def ensure_gdrive_file(filename: str, gdrive_id: str, output_dir) -> "Path":
+    """Return path to a data file, downloading from Google Drive to /tmp/ if needed.
+
+    Resolution order:
+      1. output_dir/filename  — file committed to repo, or present locally
+      2. /tmp/filename        — cached from an earlier download this server session
+      3. Download from Google Drive → /tmp/filename
+    """
+    from pathlib import Path as _Path
+
+    # 1. Repo output/ dir (local dev or small committed files)
+    repo_path = _Path(output_dir) / filename
+    if repo_path.exists():
+        return repo_path
+
+    # 2. /tmp/ cache
+    tmp_path = _Path(_tempfile.gettempdir()) / filename
+    if tmp_path.exists():
+        return tmp_path
+
+    # 3. Download from Google Drive
+    import gdown
+    size_hint = "~755 MB" if filename.endswith(".csv") else "~file"
+    st.info(
+        f"📥 **{filename}** not found locally — downloading from Google Drive ({size_hint}).\n\n"
+        "This is a one-time download per server session. Please wait…",
+        icon="⏳",
+    )
+    with st.spinner(f"Downloading {filename} from Google Drive…"):
+        gdown.download(id=gdrive_id, output=str(tmp_path), quiet=True, fuzzy=True)
+
+    if not tmp_path.exists():
+        st.error(
+            f"Download failed for `{filename}`. "
+            "Check that the Google Drive file ID is correct and the file is shared publicly."
+        )
+        st.stop()
+
+    st.success(f"✅ {filename} downloaded successfully.")
+    return tmp_path
 
 
 # ---------------------------------------------------------------------------
