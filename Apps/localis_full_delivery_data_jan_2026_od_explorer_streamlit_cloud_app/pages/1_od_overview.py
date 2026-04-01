@@ -522,8 +522,8 @@ period_label  = period if period != "All" else "All periods"
 # Header
 # ---------------------------------------------------------------------------
 
-st.title("Localis Sampledata — Network Flow Map & Rankings")
-st.caption(f"Localis Sampledata · Victoria · {period_label} · **{len(filtered_df):,}** corridors shown")
+st.title("Localis FullDelivary — Network Flow Map & Rankings")
+st.caption(f"Localis FullDelivary · Victoria · {period_label} · **{len(filtered_df):,}** corridors shown")
 
 # ---------------------------------------------------------------------------
 # KPI row

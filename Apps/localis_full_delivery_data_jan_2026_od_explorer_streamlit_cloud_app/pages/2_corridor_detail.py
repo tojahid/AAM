@@ -86,8 +86,8 @@ def load_data(ranked_path: str, temporal_all_path: str):
 
 inject_css()
 
-st.title("Localis Sampledata — Single Corridor Deep Dive")
-st.caption("Localis Sampledata — Victoria LGA Origin–Destination Analysis")
+st.title("Localis FullDelivary — Single Corridor Deep Dive")
+st.caption("Localis FullDelivary — Victoria LGA Origin–Destination Analysis")
 
 # ---------------------------------------------------------------------------
 # Load data

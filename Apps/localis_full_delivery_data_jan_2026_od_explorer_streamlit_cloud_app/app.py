@@ -12,7 +12,7 @@ Run:
 import streamlit as st
 
 st.set_page_config(
-    page_title="Localis Sampledata — Passenger App",
+    page_title="Localis FullDelivary(Data: Only Jan 2026) — Passenger App",
     page_icon="✈️",
     layout="wide",
     initial_sidebar_state="expanded",
