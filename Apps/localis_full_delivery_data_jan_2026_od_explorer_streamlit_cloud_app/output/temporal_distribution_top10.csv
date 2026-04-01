@@ -1,0 +1,481 @@
+origin_lga,dest_lga,hour_of_day,day_type,peak_period,n_trips,origin_suburb,origin_tourism_region,origin_centroid_lat,origin_centroid_lon,dest_suburb,dest_tourism_region,dest_centroid_lat,dest_centroid_lon
+Ballarat,Melbourne,0,Weekday,Off_Peak,626,Wendouree,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,0,Weekend,Off_Peak,232,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Parkville (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,1,Weekday,Off_Peak,653,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,1,Weekend,Off_Peak,250,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,2,Weekend,Off_Peak,233,Newington (Vic.),Ballarat,-37.561288039129316,143.84125606621114,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,2,Weekday,Off_Peak,688,Ballarat East,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,3,Weekend,Off_Peak,222,Wendouree,Ballarat,-37.561288039129316,143.84125606621114,Port Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,3,Weekday,Off_Peak,765,Newington (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,4,Weekday,Off_Peak,793,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,4,Weekend,Off_Peak,302,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,5,Weekend,Off_Peak,288,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,5,Weekday,Off_Peak,957,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,6,Weekend,Off_Peak,331,Wendouree,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,6,Weekday,Off_Peak,883,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,7,Weekday,AM_Peak,978,Canadian,Ballarat,-37.561288039129316,143.84125606621114,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,7,Weekend,AM_Peak,363,Sebastopol (Vic.),Ballarat,-37.561288039129316,143.84125606621114,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,8,Weekend,AM_Peak,348,Newington (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,8,Weekday,AM_Peak,1018,Wendouree,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,9,Weekend,AM_Peak,425,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,9,Weekday,AM_Peak,1154,Soldiers Hill (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,10,Weekend,Off_Peak,387,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,10,Weekday,Off_Peak,1157,Winter Valley,Ballarat,-37.561288039129316,143.84125606621114,West Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,11,Weekend,Off_Peak,320,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,11,Weekday,Off_Peak,936,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,12,Weekday,Off_Peak,563,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,12,Weekend,Off_Peak,280,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,13,Weekend,Off_Peak,171,Newington (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,13,Weekday,Off_Peak,369,Wendouree,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,14,Weekday,Off_Peak,334,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Carlton (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,14,Weekend,Off_Peak,91,Sebastopol (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,15,Weekend,Off_Peak,72,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,15,Weekday,Off_Peak,260,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,16,Weekend,PM_Peak,83,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Carlton (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,16,Weekday,PM_Peak,220,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,17,Weekday,PM_Peak,212,Bunkers Hill,Ballarat,-37.561288039129316,143.84125606621114,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,17,Weekend,PM_Peak,76,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,18,Weekend,PM_Peak,123,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Carlton (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,18,Weekday,PM_Peak,251,Golden Point (Ballarat - Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,19,Weekend,Off_Peak,128,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,19,Weekday,Off_Peak,352,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Docklands,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,20,Weekday,Off_Peak,455,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,20,Weekend,Off_Peak,161,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Docklands,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,21,Weekday,Off_Peak,549,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,21,Weekend,Off_Peak,244,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,22,Weekend,Off_Peak,241,Golden Point (Ballarat - Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,22,Weekday,Off_Peak,496,Newington (Vic.),Ballarat,-37.561288039129316,143.84125606621114,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,23,Weekday,Off_Peak,734,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melbourne,23,Weekend,Off_Peak,265,Mount Clear,Ballarat,-37.561288039129316,143.84125606621114,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Ballarat,Melton,0,Weekend,Off_Peak,360,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,0,Weekday,Off_Peak,1062,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,1,Weekday,Off_Peak,1064,Golden Point (Ballarat - Vic.),Ballarat,-37.561288039129316,143.84125606621114,Caroline Springs,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,1,Weekend,Off_Peak,427,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,2,Weekday,Off_Peak,1161,Canadian,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,2,Weekend,Off_Peak,531,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,3,Weekend,Off_Peak,934,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,3,Weekday,Off_Peak,1078,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,4,Weekday,Off_Peak,1472,Warrenheip,Ballarat,-37.561288039129316,143.84125606621114,Rockbank,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,4,Weekend,Off_Peak,912,Ballarat East,Ballarat,-37.561288039129316,143.84125606621114,Ravenhall,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,5,Weekend,Off_Peak,592,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,5,Weekday,Off_Peak,1612,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,6,Weekday,Off_Peak,1857,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,6,Weekend,Off_Peak,554,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,7,Weekend,AM_Peak,772,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,7,Weekday,AM_Peak,1668,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,8,Weekday,AM_Peak,2038,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,8,Weekend,AM_Peak,772,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,9,Weekend,AM_Peak,951,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,9,Weekday,AM_Peak,2281,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,10,Weekday,Off_Peak,2296,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Toolern Vale,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,10,Weekend,Off_Peak,894,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,11,Weekend,Off_Peak,718,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,11,Weekday,Off_Peak,1948,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,12,Weekend,Off_Peak,502,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,12,Weekday,Off_Peak,1148,Miners Rest,Ballarat,-37.561288039129316,143.84125606621114,Grangefields,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,13,Weekday,Off_Peak,739,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,13,Weekend,Off_Peak,393,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,14,Weekend,Off_Peak,170,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,14,Weekday,Off_Peak,508,Miners Rest,Ballarat,-37.561288039129316,143.84125606621114,Aintree,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,15,Weekend,Off_Peak,123,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,15,Weekday,Off_Peak,349,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,16,Weekend,PM_Peak,84,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,16,Weekday,PM_Peak,411,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Brookfield (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,17,Weekday,PM_Peak,457,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,17,Weekend,PM_Peak,79,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,18,Weekend,PM_Peak,144,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Brookfield (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,18,Weekday,PM_Peak,453,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,19,Weekend,Off_Peak,213,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Weir Views,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,19,Weekday,Off_Peak,522,Sebastopol (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,20,Weekday,Off_Peak,884,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,20,Weekend,Off_Peak,360,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Weir Views,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,21,Weekday,Off_Peak,1081,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Weir Views,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,21,Weekend,Off_Peak,479,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Toolern Vale,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,22,Weekday,Off_Peak,915,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114,Melton West,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,22,Weekend,Off_Peak,450,Winter Valley,Ballarat,-37.561288039129316,143.84125606621114,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,23,Weekend,Off_Peak,712,Mount Pleasant (Vic.),Ballarat,-37.561288039129316,143.84125606621114,Melton South,Melbourne,-37.72214220491137,144.66696598468297
+Ballarat,Melton,23,Weekday,Off_Peak,1161,Lucas,Ballarat,-37.561288039129316,143.84125606621114,Mount Cottrell,Melbourne,-37.72214220491137,144.66696598468297
+Casey,Greater Geelong,0,Weekday,Off_Peak,547,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Little River (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,0,Weekend,Off_Peak,237,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,1,Weekday,Off_Peak,537,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,1,Weekend,Off_Peak,315,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,2,Weekday,Off_Peak,680,Clyde North,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,2,Weekend,Off_Peak,283,Hampton Park,Melbourne,-38.06111031151929,145.30117652760546,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,3,Weekend,Off_Peak,342,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,3,Weekday,Off_Peak,764,Endeavour Hills,Melbourne,-38.06111031151929,145.30117652760546,Anakie,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,4,Weekend,Off_Peak,383,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,4,Weekday,Off_Peak,871,Endeavour Hills,Melbourne,-38.06111031151929,145.30117652760546,North Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,5,Weekday,Off_Peak,949,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,5,Weekend,Off_Peak,372,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546,Charlemont,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,6,Weekday,Off_Peak,972,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,6,Weekend,Off_Peak,363,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,7,Weekday,AM_Peak,995,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Waurn Ponds,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,7,Weekend,AM_Peak,414,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,8,Weekday,AM_Peak,1257,Hampton Park,Melbourne,-38.06111031151929,145.30117652760546,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,8,Weekend,AM_Peak,508,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Highton,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,9,Weekend,AM_Peak,384,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,9,Weekday,AM_Peak,1116,Cranbourne South,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,10,Weekend,Off_Peak,399,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,10,Weekday,Off_Peak,1124,Tooradin,Melbourne,-38.06111031151929,145.30117652760546,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,11,Weekend,Off_Peak,344,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,11,Weekday,Off_Peak,753,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,12,Weekday,Off_Peak,419,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,12,Weekend,Off_Peak,214,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,13,Weekend,Off_Peak,101,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,13,Weekday,Off_Peak,257,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,14,Weekend,Off_Peak,65,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,14,Weekday,Off_Peak,138,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,15,Weekday,Off_Peak,147,Hampton Park,Melbourne,-38.06111031151929,145.30117652760546,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,15,Weekend,Off_Peak,66,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,16,Weekday,PM_Peak,172,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,16,Weekend,PM_Peak,43,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,17,Weekday,PM_Peak,288,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,17,Weekend,PM_Peak,41,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,18,Weekend,PM_Peak,60,Endeavour Hills,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,18,Weekday,PM_Peak,412,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,19,Weekend,Off_Peak,90,Doveton,Melbourne,-38.06111031151929,145.30117652760546,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,19,Weekday,Off_Peak,401,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,20,Weekend,Off_Peak,169,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Barwon Heads,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,20,Weekday,Off_Peak,514,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,21,Weekday,Off_Peak,695,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,21,Weekend,Off_Peak,264,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,22,Weekend,Off_Peak,305,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,22,Weekday,Off_Peak,487,Berwick,Melbourne,-38.06111031151929,145.30117652760546,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,23,Weekday,Off_Peak,648,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Casey,Greater Geelong,23,Weekend,Off_Peak,282,Cranbourne North,Melbourne,-38.06111031151929,145.30117652760546,Bell Post Hill,Geelong and the Bellarine,-38.15019675302578,144.38958580418054
+Greater Bendigo,Hume,0,Weekend,Off_Peak,290,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,0,Weekday,Off_Peak,744,California Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605,Sunbury,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,1,Weekend,Off_Peak,238,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,1,Weekday,Off_Peak,640,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,2,Weekend,Off_Peak,348,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,2,Weekday,Off_Peak,834,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,3,Weekday,Off_Peak,898,Marong,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,3,Weekend,Off_Peak,343,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,4,Weekend,Off_Peak,448,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,4,Weekday,Off_Peak,1195,Golden Square,Bendigo Loddon,-36.76027365719228,144.29640191322605,Greenvale (Vic.),Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,5,Weekday,Off_Peak,1189,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,5,Weekend,Off_Peak,509,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,6,Weekend,Off_Peak,453,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,6,Weekday,Off_Peak,1283,Leichardt,Bendigo Loddon,-36.76027365719228,144.29640191322605,Coolaroo,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,7,Weekend,AM_Peak,345,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605,Sunbury,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,7,Weekday,AM_Peak,1352,Elmore,Bendigo Loddon,-36.76027365719228,144.29640191322605,Campbellfield,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,8,Weekday,AM_Peak,1393,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,8,Weekend,AM_Peak,454,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,9,Weekend,AM_Peak,482,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,9,Weekday,AM_Peak,1256,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,10,Weekend,Off_Peak,472,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,10,Weekday,Off_Peak,1366,Eaglehawk,Bendigo Loddon,-36.76027365719228,144.29640191322605,Craigieburn,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,11,Weekday,Off_Peak,819,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,11,Weekend,Off_Peak,290,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,12,Weekday,Off_Peak,619,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,12,Weekend,Off_Peak,212,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,13,Weekday,Off_Peak,252,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,13,Weekend,Off_Peak,135,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,14,Weekend,Off_Peak,71,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,14,Weekday,Off_Peak,249,Woodvale (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,15,Weekend,Off_Peak,46,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,15,Weekday,Off_Peak,204,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,16,Weekday,PM_Peak,133,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,16,Weekend,PM_Peak,84,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Dallas,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,17,Weekend,PM_Peak,48,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,17,Weekday,PM_Peak,192,Woodvale (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,18,Weekday,PM_Peak,173,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,18,Weekend,PM_Peak,62,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,19,Weekend,Off_Peak,95,Flora Hill,Bendigo Loddon,-36.76027365719228,144.29640191322605,Bulla (Vic.),Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,19,Weekday,Off_Peak,329,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,20,Weekend,Off_Peak,242,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,20,Weekday,Off_Peak,570,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,21,Weekday,Off_Peak,782,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Mickleham,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,21,Weekend,Off_Peak,222,North Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Meadow Heights,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,22,Weekend,Off_Peak,453,California Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605,Sunbury,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,22,Weekday,Off_Peak,539,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,23,Weekday,Off_Peak,627,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605,Wildwood,Melbourne,-37.615969590974,144.88136462221786
+Greater Bendigo,Hume,23,Weekend,Off_Peak,306,Knowsley,Bendigo Loddon,-36.76027365719228,144.29640191322605,Sunbury,Melbourne,-37.615969590974,144.88136462221786
+Greater Geelong,Casey,0,Weekday,Off_Peak,509,Charlemont,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,0,Weekend,Off_Peak,240,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,1,Weekday,Off_Peak,544,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,1,Weekend,Off_Peak,310,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,2,Weekday,Off_Peak,690,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde North,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,2,Weekend,Off_Peak,306,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,3,Weekday,Off_Peak,756,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Endeavour Hills,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,3,Weekend,Off_Peak,336,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde North,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,4,Weekday,Off_Peak,832,Charlemont,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,4,Weekend,Off_Peak,346,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,5,Weekday,Off_Peak,923,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,5,Weekend,Off_Peak,369,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,6,Weekday,Off_Peak,959,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,6,Weekend,Off_Peak,350,Wallington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,7,Weekday,AM_Peak,1003,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,7,Weekend,AM_Peak,402,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,8,Weekend,AM_Peak,483,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,8,Weekday,AM_Peak,1239,Indented Head,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,9,Weekend,AM_Peak,362,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,9,Weekday,AM_Peak,1090,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,10,Weekday,Off_Peak,1117,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Tooradin,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,10,Weekend,Off_Peak,413,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,11,Weekday,Off_Peak,755,Little River (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,11,Weekend,Off_Peak,344,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Endeavour Hills,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,12,Weekend,Off_Peak,201,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,12,Weekday,Off_Peak,439,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,13,Weekday,Off_Peak,301,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,13,Weekend,Off_Peak,105,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,14,Weekday,Off_Peak,165,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,14,Weekend,Off_Peak,69,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hampton Park,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,15,Weekday,Off_Peak,152,Barwon Heads,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,15,Weekend,Off_Peak,66,Armstrong Creek (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne East,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,16,Weekend,PM_Peak,41,Anakie,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,16,Weekday,PM_Peak,184,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clyde (Vic.),Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,17,Weekday,PM_Peak,295,Portarlington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,17,Weekend,PM_Peak,38,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,18,Weekday,PM_Peak,403,Little River (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,18,Weekend,PM_Peak,75,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Doveton,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,19,Weekend,Off_Peak,84,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,19,Weekday,Off_Peak,423,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,20,Weekend,Off_Peak,175,Barwon Heads,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,20,Weekday,Off_Peak,482,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,21,Weekday,Off_Peak,698,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Doveton,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,21,Weekend,Off_Peak,251,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Narre Warren South,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,22,Weekend,Off_Peak,307,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne North,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,22,Weekday,Off_Peak,472,Indented Head,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Berwick,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,23,Weekday,Off_Peak,683,Corio,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Cranbourne West,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Casey,23,Weekend,Off_Peak,256,Leopold,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Endeavour Hills,Melbourne,-38.06111031151929,145.30117652760546
+Greater Geelong,Monash,0,Weekday,Off_Peak,607,Lovely Banks,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,0,Weekend,Off_Peak,194,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,1,Weekend,Off_Peak,231,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,1,Weekday,Off_Peak,584,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh East,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,2,Weekend,Off_Peak,350,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,2,Weekday,Off_Peak,802,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,3,Weekday,Off_Peak,737,Little River (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,3,Weekend,Off_Peak,278,Ocean Grove,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,4,Weekend,Off_Peak,304,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,4,Weekday,Off_Peak,980,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,5,Weekend,Off_Peak,317,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh South,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,5,Weekday,Off_Peak,1006,Geelong West,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh East,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,6,Weekday,Off_Peak,1109,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,6,Weekend,Off_Peak,460,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,7,Weekend,AM_Peak,359,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,7,Weekday,AM_Peak,905,North Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,8,Weekend,AM_Peak,361,Leopold,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,8,Weekday,AM_Peak,1010,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,9,Weekday,AM_Peak,1068,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clayton,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,9,Weekend,AM_Peak,362,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,10,Weekend,Off_Peak,426,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clayton,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,10,Weekday,Off_Peak,1000,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,11,Weekday,Off_Peak,820,Mount Duneed,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh East,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,11,Weekend,Off_Peak,310,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,12,Weekday,Off_Peak,585,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,12,Weekend,Off_Peak,273,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,13,Weekend,Off_Peak,136,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,13,Weekday,Off_Peak,502,East Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh East,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,14,Weekend,Off_Peak,78,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,14,Weekday,Off_Peak,308,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,15,Weekday,Off_Peak,197,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,15,Weekend,Off_Peak,61,Ocean Grove,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,16,Weekday,PM_Peak,183,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,16,Weekend,PM_Peak,53,Bell Park,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh East,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,17,Weekend,PM_Peak,49,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,17,Weekday,PM_Peak,156,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,18,Weekend,PM_Peak,47,Corio,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,18,Weekday,PM_Peak,201,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,19,Weekend,Off_Peak,87,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,19,Weekday,Off_Peak,249,Clifton Springs,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Hughesdale,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,20,Weekend,Off_Peak,156,Lara,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,20,Weekday,Off_Peak,401,Whittington,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,21,Weekday,Off_Peak,495,Norlane,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,21,Weekend,Off_Peak,199,Belmont (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Oakleigh East,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,22,Weekday,Off_Peak,561,Geelong,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Clayton,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,22,Weekend,Off_Peak,230,Lovely Banks,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Mount Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,23,Weekend,Off_Peak,398,Grovedale,Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Greater Geelong,Monash,23,Weekday,Off_Peak,641,Little River (Vic.),Geelong and the Bellarine,-38.15019675302578,144.38958580418054,Glen Waverley,Melbourne,-37.895962260439134,145.1358495139286
+Hume,Greater Bendigo,0,Weekend,Off_Peak,249,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,0,Weekday,Off_Peak,701,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,1,Weekday,Off_Peak,605,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,1,Weekend,Off_Peak,225,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,2,Weekend,Off_Peak,343,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,2,Weekday,Off_Peak,803,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Woodvale (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,3,Weekday,Off_Peak,923,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,3,Weekend,Off_Peak,349,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,4,Weekday,Off_Peak,1188,Coolaroo,Melbourne,-37.615969590974,144.88136462221786,Leichardt,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,4,Weekend,Off_Peak,482,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,5,Weekday,Off_Peak,1158,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,5,Weekend,Off_Peak,509,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,6,Weekday,Off_Peak,1234,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,6,Weekend,Off_Peak,440,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,7,Weekend,AM_Peak,365,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,7,Weekday,AM_Peak,1299,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,8,Weekend,AM_Peak,440,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,8,Weekday,AM_Peak,1385,Craigieburn,Melbourne,-37.615969590974,144.88136462221786,Eaglehawk,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,9,Weekend,AM_Peak,504,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,9,Weekday,AM_Peak,1272,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,10,Weekday,Off_Peak,1348,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,10,Weekend,Off_Peak,478,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,11,Weekday,Off_Peak,811,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,11,Weekend,Off_Peak,304,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,12,Weekday,Off_Peak,623,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,12,Weekend,Off_Peak,210,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,13,Weekend,Off_Peak,131,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,13,Weekday,Off_Peak,253,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,14,Weekday,Off_Peak,247,Sunbury,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,14,Weekend,Off_Peak,82,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,15,Weekend,Off_Peak,44,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,15,Weekday,Off_Peak,198,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,16,Weekday,PM_Peak,142,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,16,Weekend,PM_Peak,80,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,17,Weekend,PM_Peak,46,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,17,Weekday,PM_Peak,197,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,18,Weekend,PM_Peak,73,Kalkallo,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,18,Weekday,PM_Peak,177,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,19,Weekday,Off_Peak,330,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Golden Gully,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,19,Weekend,Off_Peak,98,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,20,Weekend,Off_Peak,253,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,20,Weekday,Off_Peak,546,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Woodvale (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,21,Weekday,Off_Peak,792,Mickleham,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,21,Weekend,Off_Peak,227,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,22,Weekend,Off_Peak,449,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,22,Weekday,Off_Peak,594,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,23,Weekday,Off_Peak,633,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Bendigo,Bendigo Loddon,-36.76027365719228,144.29640191322605
+Hume,Greater Bendigo,23,Weekend,Off_Peak,286,Wildwood,Melbourne,-37.615969590974,144.88136462221786,Ironbark (Vic.),Bendigo Loddon,-36.76027365719228,144.29640191322605
+Latrobe (Vic.),Melbourne,0,Weekday,Off_Peak,695,Hazelwood South,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,0,Weekend,Off_Peak,292,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,1,Weekday,Off_Peak,688,Traralgon,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,1,Weekend,Off_Peak,276,Morwell,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,2,Weekend,Off_Peak,378,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,2,Weekday,Off_Peak,926,Morwell,Gippsland,-38.214106711553,146.4199477751795,Carlton (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,3,Weekend,Off_Peak,439,Yallourn North,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,3,Weekday,Off_Peak,997,Traralgon,Gippsland,-38.214106711553,146.4199477751795,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,4,Weekend,Off_Peak,445,Moe,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,4,Weekday,Off_Peak,1116,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,5,Weekday,Off_Peak,1228,Morwell,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,5,Weekend,Off_Peak,485,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,6,Weekday,Off_Peak,1195,Yallourn North,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,6,Weekend,Off_Peak,485,Morwell,Gippsland,-38.214106711553,146.4199477751795,Parkville (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,7,Weekend,AM_Peak,448,Yallourn North,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,7,Weekday,AM_Peak,1261,Moe,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,8,Weekend,AM_Peak,466,Traralgon,Gippsland,-38.214106711553,146.4199477751795,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,8,Weekday,AM_Peak,1300,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,9,Weekday,AM_Peak,1379,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,9,Weekend,AM_Peak,452,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,10,Weekend,Off_Peak,561,Traralgon,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,10,Weekday,Off_Peak,1312,Morwell,Gippsland,-38.214106711553,146.4199477751795,West Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,11,Weekend,Off_Peak,521,Yallourn North,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,11,Weekday,Off_Peak,1068,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,12,Weekend,Off_Peak,310,Morwell,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,12,Weekday,Off_Peak,608,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,13,Weekday,Off_Peak,384,Moe,Gippsland,-38.214106711553,146.4199477751795,Docklands,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,13,Weekend,Off_Peak,162,Traralgon,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,14,Weekend,Off_Peak,92,Morwell,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,14,Weekday,Off_Peak,382,Morwell,Gippsland,-38.214106711553,146.4199477751795,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,15,Weekday,Off_Peak,153,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,15,Weekend,Off_Peak,81,Traralgon,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,16,Weekday,PM_Peak,180,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,16,Weekend,PM_Peak,46,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,17,Weekday,PM_Peak,198,Morwell,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,17,Weekend,PM_Peak,56,Morwell,Gippsland,-38.214106711553,146.4199477751795,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,18,Weekend,PM_Peak,79,Traralgon,Gippsland,-38.214106711553,146.4199477751795,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,18,Weekday,PM_Peak,211,Moe,Gippsland,-38.214106711553,146.4199477751795,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,19,Weekday,Off_Peak,317,Traralgon,Gippsland,-38.214106711553,146.4199477751795,Carlton (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,19,Weekend,Off_Peak,154,Morwell,Gippsland,-38.214106711553,146.4199477751795,Parkville (Vic.),Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,20,Weekday,Off_Peak,543,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,20,Weekend,Off_Peak,202,Morwell,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,21,Weekend,Off_Peak,278,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,21,Weekday,Off_Peak,681,Morwell,Gippsland,-38.214106711553,146.4199477751795,Southbank,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,22,Weekday,Off_Peak,644,Morwell,Gippsland,-38.214106711553,146.4199477751795,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,22,Weekend,Off_Peak,290,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,23,Weekend,Off_Peak,294,Traralgon,Gippsland,-38.214106711553,146.4199477751795,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Latrobe (Vic.),Melbourne,23,Weekday,Off_Peak,647,Morwell,Gippsland,-38.214106711553,146.4199477751795,Melbourne,Melbourne,-37.81112228169855,144.95439503242488
+Melbourne,Latrobe (Vic.),0,Weekday,Off_Peak,690,Docklands,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),0,Weekend,Off_Peak,294,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),1,Weekend,Off_Peak,339,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),1,Weekday,Off_Peak,761,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),2,Weekend,Off_Peak,369,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),2,Weekday,Off_Peak,861,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),3,Weekend,Off_Peak,400,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),3,Weekday,Off_Peak,915,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),4,Weekend,Off_Peak,407,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),4,Weekday,Off_Peak,1053,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),5,Weekday,Off_Peak,1103,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),5,Weekend,Off_Peak,409,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Moe,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),6,Weekday,Off_Peak,1155,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Yallourn North,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),6,Weekend,Off_Peak,471,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),7,Weekday,AM_Peak,1322,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Hazelwood,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),7,Weekend,AM_Peak,443,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Yallourn North,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),8,Weekday,AM_Peak,1379,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),8,Weekend,AM_Peak,481,Parkville (Vic.),Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),9,Weekend,AM_Peak,507,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),9,Weekday,AM_Peak,1401,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),10,Weekday,Off_Peak,1320,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Yallourn North,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),10,Weekend,Off_Peak,552,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),11,Weekday,Off_Peak,1010,Parkville (Vic.),Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),11,Weekend,Off_Peak,548,West Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),12,Weekend,Off_Peak,266,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),12,Weekday,Off_Peak,579,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),13,Weekday,Off_Peak,378,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),13,Weekend,Off_Peak,181,Carlton (Vic.),Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),14,Weekend,Off_Peak,86,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),14,Weekday,Off_Peak,350,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),15,Weekday,Off_Peak,152,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),15,Weekend,Off_Peak,84,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),16,Weekend,PM_Peak,46,West Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),16,Weekday,PM_Peak,170,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),17,Weekend,PM_Peak,54,Kensington (Vic.),Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),17,Weekday,PM_Peak,202,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),18,Weekend,PM_Peak,68,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Moe,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),18,Weekday,PM_Peak,176,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),19,Weekend,Off_Peak,132,Parkville (Vic.),Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),19,Weekday,Off_Peak,307,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Moe,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),20,Weekend,Off_Peak,223,North Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),20,Weekday,Off_Peak,454,Docklands,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),21,Weekday,Off_Peak,644,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),21,Weekend,Off_Peak,287,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),22,Weekend,Off_Peak,312,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Moe,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),22,Weekday,Off_Peak,623,Southbank,Melbourne,-37.81112228169855,144.95439503242488,Moe,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),23,Weekday,Off_Peak,570,East Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Traralgon,Gippsland,-38.214106711553,146.4199477751795
+Melbourne,Latrobe (Vic.),23,Weekend,Off_Peak,286,Melbourne,Melbourne,-37.81112228169855,144.95439503242488,Morwell,Gippsland,-38.214106711553,146.4199477751795
+Melton,Ballarat,0,Weekday,Off_Peak,1069,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,0,Weekend,Off_Peak,391,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,1,Weekend,Off_Peak,419,Melton West,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,1,Weekday,Off_Peak,1023,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,2,Weekend,Off_Peak,515,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,2,Weekday,Off_Peak,1187,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,3,Weekday,Off_Peak,1154,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,3,Weekend,Off_Peak,911,Burnside (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat East,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,4,Weekday,Off_Peak,1457,Weir Views,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,4,Weekend,Off_Peak,912,Weir Views,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,5,Weekday,Off_Peak,1603,Toolern Vale,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,5,Weekend,Off_Peak,607,Mount Cottrell,Melbourne,-37.72214220491137,144.66696598468297,Lucas,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,6,Weekend,Off_Peak,533,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,6,Weekday,Off_Peak,1847,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,7,Weekend,AM_Peak,771,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,7,Weekday,AM_Peak,1736,Mount Cottrell,Melbourne,-37.72214220491137,144.66696598468297,Lucas,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,8,Weekend,AM_Peak,770,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Gong Gong,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,8,Weekday,AM_Peak,2063,Truganina,Melbourne,-37.72214220491137,144.66696598468297,Soldiers Hill (Vic.),Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,9,Weekday,AM_Peak,2297,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,9,Weekend,AM_Peak,910,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,10,Weekend,Off_Peak,877,Truganina,Melbourne,-37.72214220491137,144.66696598468297,Lucas,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,10,Weekday,Off_Peak,2215,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,11,Weekend,Off_Peak,718,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,11,Weekday,Off_Peak,1951,Melton West,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,12,Weekend,Off_Peak,498,Brookfield (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,12,Weekday,Off_Peak,1128,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,13,Weekday,Off_Peak,788,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,13,Weekend,Off_Peak,352,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,14,Weekday,Off_Peak,491,Grangefields,Melbourne,-37.72214220491137,144.66696598468297,Miners Rest,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,14,Weekend,Off_Peak,176,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,15,Weekend,Off_Peak,121,Melton West,Melbourne,-37.72214220491137,144.66696598468297,Alfredton,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,15,Weekday,Off_Peak,359,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,16,Weekday,PM_Peak,399,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,16,Weekend,PM_Peak,80,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,17,Weekday,PM_Peak,467,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,17,Weekend,PM_Peak,80,Brookfield (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,18,Weekend,PM_Peak,161,Brookfield (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,18,Weekday,PM_Peak,430,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,19,Weekend,Off_Peak,216,Weir Views,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,19,Weekday,Off_Peak,554,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat East,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,20,Weekend,Off_Peak,347,Weir Views,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,20,Weekday,Off_Peak,870,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,21,Weekend,Off_Peak,471,Melton South,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,21,Weekday,Off_Peak,1032,Weir Views,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,22,Weekday,Off_Peak,880,Melton West,Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,22,Weekend,Off_Peak,448,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,23,Weekend,Off_Peak,721,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
+Melton,Ballarat,23,Weekday,Off_Peak,1153,Melton (Vic.),Melbourne,-37.72214220491137,144.66696598468297,Ballarat Central,Ballarat,-37.561288039129316,143.84125606621114
