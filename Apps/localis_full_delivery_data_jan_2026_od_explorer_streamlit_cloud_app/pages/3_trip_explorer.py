@@ -28,6 +28,7 @@ APP_DIR      = Path(__file__).parent
 OUTPUT_DIR   = APP_DIR.parent / "output"
 CSV_PATH     = OUTPUT_DIR / "trips_jan_2026.csv"
 PARQUET_PATH = OUTPUT_DIR / "trips.parquet"
+RANKED_CSV   = OUTPUT_DIR / "ranked_corridors.csv"
 EXPORT_PATH  = Path(tempfile.gettempdir()) / "filtered_export.csv"
 
 # Google Drive file ID for trips_20GB.csv
@@ -89,6 +90,18 @@ def load_parquet(path: Path, nrows: int | None = None) -> pd.DataFrame:
         df = pd.read_parquet(path)
     return _fix_date(df)
 
+
+@st.cache_data
+def load_ranked_corridors(path: Path) -> pd.DataFrame:
+    return pd.read_csv(path).rename(columns={
+        "origin_lga": "origin_lga_name",
+        "dest_lga":   "destination_lga_name",
+    })
+
+
+# Load full pipeline corridor data (used for Top 15 bar chart and ALL_LGAS)
+ranked_full = load_ranked_corridors(RANKED_CSV) if RANKED_CSV.exists() else None
+
 # ---------------------------------------------------------------------------
 # Sidebar — Part 1: Data source only
 # ---------------------------------------------------------------------------
@@ -134,7 +147,13 @@ _size_str  = f"{_file_size / 1e9:.1f} GB"
 with st.spinner(f"Sampling {SAMPLE_ROWS:,} rows from {_size_str} {data_source} file…"):
     df_full = load_csv(resolved_path, SAMPLE_ROWS) if data_source == "CSV" else load_parquet(resolved_path, SAMPLE_ROWS)
 
-ALL_LGAS = sorted(set(df_full["origin_lga_name"].tolist()) | set(df_full["destination_lga_name"].tolist()))
+if ranked_full is not None:
+    ALL_LGAS = sorted(
+        set(ranked_full["origin_lga_name"].tolist())
+        | set(ranked_full["destination_lga_name"].tolist())
+    )
+else:
+    ALL_LGAS = sorted(set(df_full["origin_lga_name"].tolist()) | set(df_full["destination_lga_name"].tolist()))
 MIN_DATE = df_full["date"].min()
 MAX_DATE = df_full["date"].max()
 
@@ -217,8 +236,11 @@ k1, k2, k3, k4, k5 = st.columns(5)
 
 k1.metric("Total Trips",       f"{len(df):,}")
 k2.metric("Unique Devices",    f"{df['device_id'].nunique():,}")
-k3.metric("Unique Corridors",
-           f"{df[['origin_lga_name','destination_lga_name']].drop_duplicates().shape[0]:,}")
+_n_corridors = (
+    len(ranked_full) if ranked_full is not None
+    else df[["origin_lga_name", "destination_lga_name"]].drop_duplicates().shape[0]
+)
+k3.metric("Unique Corridors", f"{_n_corridors:,}")
 k4.metric("Avg Distance (km)", f"{df['distance_km'].mean():.1f}" if len(df) else "—")
 k5.metric("Max Distance (km)", f"{df['distance_km'].max():.1f}"  if len(df) else "—")
 
@@ -235,15 +257,26 @@ chart_col, dist_col = st.columns([3, 2])
 
 with chart_col:
     chart_header("Top 15 Corridors by Trip Count", INFO_TOP15, h3=True)
-    top = (
-        df.groupby(["origin_lga_name", "destination_lga_name"])
-        .agg(trips=("device_id", "count"), avg_dist=("distance_km", "mean"))
-        .reset_index()
-        .sort_values("trips", ascending=False)
-        .head(15)
-        .copy()
-    )
-    top["corridor"] = top["origin_lga_name"] + "  →  " + top["destination_lga_name"]
+    if ranked_full is not None:
+        _r = ranked_full.copy()
+        if origin_sel:
+            _r = _r[_r["origin_lga_name"].isin(origin_sel)]
+        if dest_sel:
+            _r = _r[_r["destination_lga_name"].isin(dest_sel)]
+        top = _r.head(15).copy().rename(columns={
+            "n_trips": "trips", "avg_distance_km": "avg_dist",
+        })
+        top["corridor"] = top["origin_lga_name"] + "  →  " + top["destination_lga_name"]
+    else:
+        top = (
+            df.groupby(["origin_lga_name", "destination_lga_name"])
+            .agg(trips=("device_id", "count"), avg_dist=("distance_km", "mean"))
+            .reset_index()
+            .sort_values("trips", ascending=False)
+            .head(15)
+            .copy()
+        )
+        top["corridor"] = top["origin_lga_name"] + "  →  " + top["destination_lga_name"]
 
     fig_bar = px.bar(
         top.sort_values("trips"),
@@ -263,6 +296,7 @@ with chart_col:
         yaxis=dict(tickfont=dict(size=11)),
     )
     st.plotly_chart(fig_bar, use_container_width=True)
+    st.caption("Rankings from full pipeline data. Apply Origin/Destination filters in the sidebar to focus.")
 
 with dist_col:
     chart_header("Distance Distribution", INFO_DIST, h3=True)
