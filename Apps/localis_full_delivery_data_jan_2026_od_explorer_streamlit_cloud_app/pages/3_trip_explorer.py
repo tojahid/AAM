@@ -5,7 +5,7 @@
 # Adapted from app_trip_explorer_trip_level.py — path corrected for new depth.
 #
 # Data source (sidebar toggle):
-#   CSV     — output/trips_20GB.csv
+#   CSV     — output/trips_jan_2026.csv
 #   Parquet — output/trips.parquet (default)
 # =============================================================================
 
@@ -31,7 +31,7 @@ PARQUET_PATH = OUTPUT_DIR / "trips.parquet"
 RANKED_CSV   = OUTPUT_DIR / "ranked_corridors.csv"
 EXPORT_PATH  = Path(tempfile.gettempdir()) / "filtered_export.csv"
 
-# Google Drive file ID for trips_20GB.csv
+# Google Drive file ID for trips_jan_2026.csv
 # Share the file: Drive → right-click → Share → Anyone with link (Viewer)
 # Copy the ID from: https://drive.google.com/file/d/FILE_ID_HERE/view
 GDRIVE_CSV_FILE_ID = "1RsGks2qXD_pYPikChEmEalq42kvUMTV3"
@@ -128,11 +128,11 @@ with st.sidebar:
 if data_source == "CSV" and not data_path.exists():
     if not GDRIVE_CSV_FILE_ID:
         st.error(
-            "trips_20GB.csv not found in `output/` and no Google Drive file ID is set.\n\n"
+            "trips_jan_2026.csv not found in `output/` and no Google Drive file ID is set.\n\n"
             "Set `GDRIVE_CSV_FILE_ID` at the top of this file."
         )
         st.stop()
-    resolved_path = ensure_gdrive_file("trips_20GB.csv", GDRIVE_CSV_FILE_ID, OUTPUT_DIR)
+    resolved_path = ensure_gdrive_file("trips_jan_2026.csv", GDRIVE_CSV_FILE_ID, OUTPUT_DIR)
 elif data_source == "Parquet" and not data_path.exists():
     st.error(f"File not found: `{data_path}`\n\nAdd trips.parquet to the `output/` folder.")
     st.stop()
