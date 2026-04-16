@@ -124,19 +124,31 @@ Users do NOT need to use the in-app download panel.
 
 **National scope always uses Local Data.**
 
-**Rank By**: Tonnes / Cost/Tonne (AUD) / Transport Cost ($) / CO₂ (t) / Trips
-- **Rank 1 = highest value.** For Cost/Tonne, Rank 1 = most expensive corridor.
+**Rank By**: Tonnes / Cost/Tonne (AUD) / Transport Cost ($) / CO₂ (t) / Trips / Tonnes/Trip / Trips/Tonne
+- **Rank 1 = highest value** for all metrics. For Cost/Tonne, Rank 1 = most expensive corridor. For Tonnes/Trip, Rank 1 = most load-efficient corridor.
 - Stored in `rank_metric` (str); mapped to `rank_field` and `(axis_label, fmt_str)` via:
 
 ```python
 _RANK_FIELD_MAP  = {"Tonnes": "tonnes", "Cost/Tonne (AUD)": "cost_per_tonne",
-                    "Transport Cost ($)": "transport_cost", "CO₂ (t)": "co2", "Trips": "trips"}
+                    "Transport Cost ($)": "transport_cost", "CO₂ (t)": "co2", "Trips": "trips",
+                    "Tonnes/Trip": "tonnes_per_trip", "Trips/Tonne": "trips_per_tonne"}
 _RANK_LABEL_MAP  = {"Tonnes": ("Tonnes",",.0f"), "Cost/Tonne (AUD)": ("Cost/Tonne (AUD)","$,.2f"),
                     "Transport Cost ($)": ("Transport Cost ($)","$,.0f"),
-                    "CO₂ (t)": ("CO₂ (t)",",.1f"), "Trips": ("Trips",",.0f")}
+                    "CO₂ (t)": ("CO₂ (t)",",.1f"), "Trips": ("Trips",",.0f"),
+                    "Tonnes/Trip": ("Tonnes/Trip",",.2f"), "Trips/Tonne": ("Trips/Tonne",",.4f")}
 rank_field = _RANK_FIELD_MAP[rank_metric]
 axis_label, fmt_str = _RANK_LABEL_MAP[rank_metric]
 ```
+
+**Min. Trip Distance (km)** — number input, default `70`, min `0`, step `10`.
+- Filters out OD corridors where `avg_distance < threshold` before ranking.
+- Setting to `0` disables the filter entirely.
+- Same-LGA self-loop corridors have `avg_distance = 0` and are excluded at default 70 km.
+
+**Intra-state only** — checkbox, default unchecked.
+- When checked, retains only corridors where `orig_state == dest_state`.
+- National scope: keeps same-state pairs from the filtered row set (combined with state filter = e.g. VIC→VIC only).
+- Single Origin scope: keeps only destinations within the origin's own state.
 
 **Commodity Filter** (two categories, Local Data only):
 
@@ -302,13 +314,23 @@ Defined inline inside the `if is_national:` block:
 def _b3_agg(group_cols: list[str], val_col: str) -> tuple:
     """
     Aggregate df by rank_field for B3 (Top Origins / Top Destinations).
-    Handles cost_per_tonne as a ratio (SUM(transport_cost)/SUM(tonnes))
-    rather than a summable field.
+    Handles ratio fields (cost_per_tonne, tonnes_per_trip, trips_per_tonne)
+    by re-deriving from component sums rather than summing the ratios directly.
     Returns (df_top10, list_of_values).
     """
     if rank_field == "cost_per_tonne":
+        # SUM(transport_cost) / SUM(tonnes)
         _agg = df.groupby(group_cols).agg(_tc=("transport_cost","sum"), _t=("tonnes","sum")).reset_index()
         _agg["_rank_val"] = _agg["_tc"] / _agg["_t"].replace(0, float("nan"))
+        _top = _agg.nlargest(10, "_rank_val")
+        return _top, _top["_rank_val"].tolist()
+    elif rank_field in ("tonnes_per_trip", "trips_per_tonne"):
+        # SUM(tonnes)/SUM(trips)  or  SUM(trips)/SUM(tonnes)
+        _agg = df.groupby(group_cols).agg(_t=("tonnes","sum"), _tr=("trips","sum")).reset_index()
+        if rank_field == "tonnes_per_trip":
+            _agg["_rank_val"] = _agg["_t"] / _agg["_tr"].replace(0, float("nan"))
+        else:
+            _agg["_rank_val"] = _agg["_tr"] / _agg["_t"].replace(0, float("nan"))
         _top = _agg.nlargest(10, "_rank_val")
         return _top, _top["_rank_val"].tolist()
     else:
@@ -331,7 +353,8 @@ def _load_commodity_summary_l3_filtered(
     state_filter: when provided (national scope), only scans JSON files for those states.
     Returns list of dicts with:
         commodity_key, commodity_display, industry, sector,
-        tonnes, transport_cost, freight_value, co2, trips, od_pairs, cost_per_tonne
+        tonnes, transport_cost, freight_value, co2, trips, od_pairs,
+        cost_per_tonne, tonnes_per_trip, trips_per_tonne
     """
 
 @st.cache_data(show_spinner=False)
@@ -359,7 +382,7 @@ def _load_commodity_od_corridors_l3_filtered(
     Returns {commodity_key: [top10 corridor dicts]}.
     Each corridor dict: orig_lga, dest_lga, orig_name, dest_name,
                         orig_state, dest_state, tonnes, transport_cost,
-                        cost_per_tonne, co2, trips
+                        cost_per_tonne, co2, trips, tonnes_per_trip, trips_per_tonne
     """
 
 @st.cache_data(show_spinner=False)
@@ -565,6 +588,22 @@ def chart_header(title: str, info_md: str, section: bool = True) -> None:
   names at call time, not definition time.
 - **`_b3_agg` defined inside `if is_national:` block:** Inline helper function, not reusable
   outside that block. Defined at render time with `rank_field` in closure.
+- **Tonnes/Trip and Trips/Tonne are inverses:** `trips_per_tonne = 1 / tonnes_per_trip`. For
+  high-volume corridors, `trips_per_tonne` rounds to `0.0000` at 4 dp — this is expected, not
+  a bug. The underlying float is stored precisely.
+- **Distance filter excludes self-loops:** Same-LGA corridors have `avg_trip_distance_km = 0`
+  (set by `_compute_totals()`). At default 70 km minimum they are always excluded. Set to 0 to
+  include them.
+- **Distance and intra-state filters applied after Commodity Filter Insights:** The Insights
+  section loads via `_cached_commodity_summary()` / `_cached_commodity_od_corridors()` directly
+  from JSON — it is NOT affected by distance or intra-state filters (consistent by design with
+  how those loaders work). The B1/R1/B3/R4 charts downstream are fully filtered.
+- **Intra-state filter with unknown dest LGA:** `LGA_STATE.get(dest_lga, "")` returns `""` for
+  unrecognised codes. These rows will not match any valid origin state and are excluded —
+  conservative but correct behaviour.
+- **Ratio fields in _b3_agg:** `tonnes_per_trip` and `trips_per_tonne` are re-derived from
+  `SUM(tonnes)/SUM(trips)` and `SUM(trips)/SUM(tonnes)` respectively — same pattern as
+  `cost_per_tonne`. Simple summation of ratio columns would give wrong results.
 
 ---
 
@@ -610,6 +649,8 @@ plotly>=5.0.0
   - Transport Cost → "Median Transport Cost" in `$`
   - CO₂ → "Median CO₂ (t)"
   - Trips → "Median Trips"
+  - Tonnes/Trip → "Median Tonnes/Trip" in `t/trip` (2 dp)
+  - Trips/Tonne → "Median Trips/Tonne" (4 dp)
 
 ### Info Popover Improvements
 
@@ -639,3 +680,101 @@ filter `json_files` to selected states via `f.parent.name in state_filter`.
 
 **Scope:** Single Origin scope does not pass `state_filter` (defaults to `frozenset()` = all).
 `frozenset` is used (not `list`) because `@st.cache_data` requires hashable arguments.
+
+---
+
+### New Rank By Metrics — Tonnes/Trip and Trips/Tonne
+
+**Added to `pages/Commodity_OD_Rankings.py`:**
+
+**Formulas:**
+```
+tonnes_per_trip = annual_tonnes / total_trips    (0.0 when trips == 0)
+trips_per_tonne = total_trips / annual_tonnes    (0.0 when tonnes == 0)
+```
+
+**Interpretation:**
+- `tonnes_per_trip` — average load per trip. Higher = more efficient, fuller loads.
+- `trips_per_tonne` — trips needed to move one tonne. Higher = more fragmented movements.
+- They are mathematical inverses: `trips_per_tonne = 1 / tonnes_per_trip`.
+
+**Fields added to every OD row dict** (all 3 paths: national, single-origin-online, single-origin-local):
+```python
+"tonnes_per_trip": _t / _tr if _tr else 0.0,
+"trips_per_tonne": _tr / _t if _t else 0.0,
+```
+
+**Fields added to commodity-level dicts** (commodity summary loader, corridor loader,
+`_ind_agg` in Commodity Overview, `_load_state_commodity_summary_l3`):
+```python
+row["tonnes_per_trip"] = row["tonnes"] / row["trips"] if row["trips"] > 0 else 0.0
+row["trips_per_tonne"] = row["trips"] / row["tonnes"] if row["tonnes"] > 0 else 0.0
+```
+
+**`_b3_agg` extended** to handle both new ratio fields via weighted aggregation
+(SUM(tonnes)/SUM(trips) and SUM(trips)/SUM(tonnes)).
+
+**R4 Full Rankings Table** — `Tonnes/Trip` (format `%.2f`) and `Trips/Tonne` (format `%.4f`)
+columns added to both national and single-origin table views.
+
+**B1 Median card** — two new branches:
+- `tonnes_per_trip` → "Median Tonnes/Trip" displayed as `{value:,.2f} t/trip`
+- `trips_per_tonne` → "Median Trips/Tonne" displayed as `{value:,.4f}`
+
+---
+
+### New Sidebar Filters — Min. Trip Distance and Intra-state Only
+
+**Added to `pages/Commodity_OD_Rankings.py`:**
+
+**Min. Trip Distance (km)**
+- `st.number_input`, default `70`, min `0`, max `5000`, step `10`
+- Applied after all rows are loaded, before sort+rank:
+  ```python
+  if min_distance_km > 0:
+      rows = [r for r in rows if r.get("avg_distance", 0) >= min_distance_km]
+  ```
+- Source of `avg_distance`: trip-count-weighted average from `_compute_totals()`;
+  set to `0.0` for same-LGA self-loops.
+
+**Intra-state only**
+- `st.checkbox`, default unchecked
+- Applied immediately after distance filter:
+  ```python
+  if intra_state_only:
+      rows = [r for r in rows if r.get("orig_state") == r.get("dest_state")]
+  ```
+- `dest_state` derived from `LGA_STATE.get(dest_lga, "")` in all row-building paths.
+- Works in both National and Single Origin scopes.
+- If combined filters produce no rows, shows an `st.info` message and `st.stop()`.
+
+---
+
+## Files Changed (2026-04-16)
+
+| File | What changed |
+|---|---|
+| `pages/Commodity_OD_Rankings.py` | All changes below — only file modified today |
+
+### Detailed change list — `pages/Commodity_OD_Rankings.py`
+
+| Location | Change |
+|---|---|
+| Rank By selectbox (~line 894) | Added `"Tonnes/Trip"` and `"Trips/Tonne"` options |
+| `_RANK_FIELD_MAP` (~line 1262) | Added `"Tonnes/Trip": "tonnes_per_trip"`, `"Trips/Tonne": "trips_per_tonne"` |
+| `_RANK_LABEL_MAP` (~line 1271) | Added `"Tonnes/Trip": ("Tonnes/Trip",",.2f")`, `"Trips/Tonne": ("Trips/Tonne",",.4f")` |
+| Sidebar distance filter (~line 903) | New `st.number_input` — Min. Trip Distance (km), default 70 |
+| Sidebar intra-state filter (~line 921) | New `st.checkbox` — Intra-state only, default unchecked |
+| National row builder (~line 1329) | Added `tonnes_per_trip` and `trips_per_tonne` to each row dict |
+| Single origin online row builder (~line 1395) | Added `tonnes_per_trip` and `trips_per_tonne` to each row dict |
+| Single origin local row builder (~line 1454) | Added `tonnes_per_trip` and `trips_per_tonne` to each row dict |
+| Distance + intra-state filter block (~line 1933) | New filter block applied before sort+rank |
+| B1 median card (~line 2032) | Two new `elif` branches for `tonnes_per_trip` and `trips_per_tonne` |
+| `_b3_agg` (~line 2172) | New `elif` branch for ratio aggregation of both new fields |
+| `_load_commodity_summary_l3_filtered` (~line 437) | Added `tonnes_per_trip` and `trips_per_tonne` to output dicts |
+| `_load_commodity_od_corridors_l3_filtered` (~line 591) | Added `tonnes_per_trip` and `trips_per_tonne` to corridor dicts |
+| `_load_state_commodity_summary_l3` (~line 664) | Added `tonnes_per_trip` and `trips_per_tonne` to state×commodity dicts |
+| `_ind_agg` in Commodity Overview (~line 2685) | Added `tonnes_per_trip` and `trips_per_tonne` after accumulation loop |
+| R4 national table (~line 2506) | Added `Tonnes/Trip` and `Trips/Tonne` columns + column config |
+| R4 single origin table (~line 2543) | Added `Tonnes/Trip` and `Trips/Tonne` columns + column config |
+

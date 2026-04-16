@@ -435,9 +435,9 @@ def _load_commodity_summary_l3_filtered(
 
     rows = sorted(accum.values(), key=lambda x: x["tonnes"], reverse=True)
     for row in rows:
-        row["cost_per_tonne"] = (
-            row["transport_cost"] / row["tonnes"] if row["tonnes"] > 0 else 0.0
-        )
+        row["cost_per_tonne"]  = row["transport_cost"] / row["tonnes"] if row["tonnes"] > 0 else 0.0
+        row["tonnes_per_trip"] = row["tonnes"] / row["trips"] if row["trips"] > 0 else 0.0
+        row["trips_per_tonne"] = row["trips"] / row["tonnes"] if row["tonnes"] > 0 else 0.0
     return rows, None
 
 
@@ -589,7 +589,11 @@ def _load_commodity_od_corridors_l3_filtered(
     for comm_key, od_dict in accum.items():
         corridors = sorted(od_dict.values(), key=lambda x: x["tonnes"], reverse=True)
         for c in corridors:
-            c["cost_per_tonne"] = c["transport_cost"] / c["tonnes"] if c["tonnes"] else 0.0
+            _ct  = c["tonnes"]
+            _ctr = c["trips"]
+            c["cost_per_tonne"]  = c["transport_cost"] / _ct if _ct else 0.0
+            c["tonnes_per_trip"] = _ct / _ctr if _ctr else 0.0
+            c["trips_per_tonne"] = _ctr / _ct if _ct else 0.0
             c["orig_name"]  = LGA_CODES.get(c["orig_lga"], c["orig_lga"])
             c["dest_name"]  = LGA_CODES.get(c["dest_lga"], c["dest_lga"])
             c["orig_state"] = LGA_STATE.get(c["orig_lga"], "")
@@ -658,7 +662,9 @@ def _load_state_commodity_summary_l3(
                     a["trips"]          += int(r.get("trips_count", 0))
 
     for v in accum.values():
-        v["cost_per_tonne"] = v["transport_cost"] / v["tonnes"] if v["tonnes"] else 0.0
+        v["cost_per_tonne"]  = v["transport_cost"] / v["tonnes"] if v["tonnes"] else 0.0
+        v["tonnes_per_trip"] = v["tonnes"] / v["trips"] if v["trips"] else 0.0
+        v["trips_per_tonne"] = v["trips"] / v["tonnes"] if v["tonnes"] else 0.0
 
     return accum, None
 
@@ -889,9 +895,40 @@ with st.sidebar:
     )
     rank_metric = st.selectbox(
         "Rank by",
-        options=["Tonnes", "Cost/Tonne (AUD)", "Transport Cost ($)", "CO\u2082 (t)", "Trips"],
+        options=["Tonnes", "Cost/Tonne (AUD)", "Transport Cost ($)", "CO\u2082 (t)", "Trips", "Tonnes/Trip", "Trips/Tonne"],
         index=0,
         label_visibility="collapsed",
+    )
+
+    st.divider()
+
+    # ── DISTANCE FILTER ───────────────────────────────────────────────────
+    st.markdown(
+        '<div style="font-size:11px; font-weight:700; text-transform:uppercase; '
+        'letter-spacing:0.8px; color:#7BA7CC; margin-bottom:8px;">Min. Trip Distance (km)</div>',
+        unsafe_allow_html=True,
+    )
+    min_distance_km = st.number_input(
+        "Min distance km",
+        min_value=0,
+        max_value=5000,
+        value=70,
+        step=10,
+        label_visibility="collapsed",
+        help="Filter out corridors where the average trip distance is below this threshold. Default 70 km.",
+    )
+
+    st.divider()
+
+    # ── INTRA-STATE FILTER ────────────────────────────────────────────────
+    intra_state_only = st.checkbox(
+        "Intra-state only",
+        value=False,
+        help=(
+            "Show only corridors where the destination state matches the origin state. "
+            "National: keeps only same-state OD pairs (within selected states if a state filter is active). "
+            "Single Origin: keeps only destinations within the origin's state."
+        ),
     )
 
     st.divider()
@@ -1241,6 +1278,8 @@ _RANK_FIELD_MAP = {
     "Transport Cost ($)": "transport_cost",
     "CO\u2082 (t)":        "co2",
     "Trips":               "trips",
+    "Tonnes/Trip":         "tonnes_per_trip",
+    "Trips/Tonne":         "trips_per_tonne",
 }
 rank_field = _RANK_FIELD_MAP[rank_metric]
 
@@ -1250,6 +1289,8 @@ _RANK_LABEL_MAP = {
     "Transport Cost ($)": ("Transport Cost ($)", "$,.0f"),
     "CO\u2082 (t)":        ("CO\u2082 (t)", ",.1f"),
     "Trips":               ("Trips", ",.0f"),
+    "Tonnes/Trip":         ("Tonnes/Trip", ",.2f"),
+    "Trips/Tonne":         ("Trips/Tonne", ",.4f"),
 }
 axis_label, fmt_str = _RANK_LABEL_MAP[rank_metric]
 
@@ -1289,20 +1330,24 @@ if is_national:
         orig_n    = LGA_CODES.get(r["orig_lga"], r["orig_lga"])
         dest_n    = LGA_CODES.get(r["dest_lga"], r["dest_lga"])
         dest_state = LGA_STATE.get(r["dest_lga"], "")
+        _t  = r["tonnes"]
+        _tr = r["trips"]
         rows.append({
-            "orig_lga":       r["orig_lga"],
-            "orig_name":      orig_n,
-            "orig_state":     r["orig_state"],
-            "dest_lga":       r["dest_lga"],
-            "dest_name":      dest_n,
-            "dest_state":     dest_state,
-            "tonnes":         r["tonnes"],
-            "cost_per_tonne": r["cost_per_tonne"],
-            "transport_cost": r["transport_cost"],
-            "freight_value":  r["freight_value"],
-            "co2":            r["co2"],
-            "trips":          r["trips"],
-            "avg_distance":   r["avg_distance"],
+            "orig_lga":        r["orig_lga"],
+            "orig_name":       orig_n,
+            "orig_state":      r["orig_state"],
+            "dest_lga":        r["dest_lga"],
+            "dest_name":       dest_n,
+            "dest_state":      dest_state,
+            "tonnes":          _t,
+            "cost_per_tonne":  r["cost_per_tonne"],
+            "transport_cost":  r["transport_cost"],
+            "freight_value":   r["freight_value"],
+            "co2":             r["co2"],
+            "trips":           _tr,
+            "avg_distance":    r["avg_distance"],
+            "tonnes_per_trip": _t / _tr if _tr else 0.0,
+            "trips_per_tonne": _tr / _t if _t else 0.0,
         })
     total_origins = len({r["orig_lga"] for r in rows})
     _data_level = (
@@ -1351,20 +1396,24 @@ else:
             dlga   = r.get("dest_lga", "")
             dname  = r.get("name", LGA_CODES.get(dlga, dlga))
             dstate = LGA_STATE.get(dlga, "")
+            _t  = r.get("tonnes", 0)
+            _tr = r.get("trips", 0)
             rows.append({
-                "orig_lga":       orig_code,
-                "orig_name":      orig_name,
-                "orig_state":     orig_state_abbr,
-                "dest_lga":       dlga,
-                "dest_name":      dname,
-                "dest_state":     dstate,
-                "tonnes":         r.get("tonnes", 0),
-                "cost_per_tonne": r.get("cst_per_tonne", 0),
-                "transport_cost": r.get("trip_transport_costs", 0),
-                "freight_value":  r.get("total_freight_value", 0),
-                "co2":            r.get("co2_tn", 0),
-                "trips":          r.get("trips", 0),
-                "avg_distance":   r.get("avg_trip_distance", 0),
+                "orig_lga":        orig_code,
+                "orig_name":       orig_name,
+                "orig_state":      orig_state_abbr,
+                "dest_lga":        dlga,
+                "dest_name":       dname,
+                "dest_state":      dstate,
+                "tonnes":          _t,
+                "cost_per_tonne":  r.get("cst_per_tonne", 0),
+                "transport_cost":  r.get("trip_transport_costs", 0),
+                "freight_value":   r.get("total_freight_value", 0),
+                "co2":             r.get("co2_tn", 0),
+                "trips":           _tr,
+                "avg_distance":    r.get("avg_trip_distance", 0),
+                "tonnes_per_trip": _t / _tr if _tr else 0.0,
+                "trips_per_tonne": _tr / _t if _t else 0.0,
             })
         data_note = (
             "Numbers from the **densitymap** endpoint \u2014 aggregated totals only, "
@@ -1405,20 +1454,24 @@ else:
         for dest_lga, totals in local_dict.items():
             dname  = LGA_CODES.get(dest_lga, dest_lga)
             dstate = LGA_STATE.get(dest_lga, "")
+            _t  = totals.get("annual_tonnes", 0)
+            _tr = totals.get("total_trips", 0)
             rows.append({
-                "orig_lga":       orig_code,
-                "orig_name":      orig_name,
-                "orig_state":     orig_state_abbr,
-                "dest_lga":       dest_lga,
-                "dest_name":      dname,
-                "dest_state":     dstate,
-                "tonnes":         totals.get("annual_tonnes", 0),
-                "cost_per_tonne": totals.get("cost_per_tonne", 0),
-                "transport_cost": totals.get("total_transport_costs", 0),
-                "freight_value":  totals.get("total_freight_value", 0),
-                "co2":            totals.get("total_co2_t", 0),
-                "trips":          totals.get("total_trips", 0),
-                "avg_distance":   totals.get("avg_trip_distance_km", 0),
+                "orig_lga":        orig_code,
+                "orig_name":       orig_name,
+                "orig_state":      orig_state_abbr,
+                "dest_lga":        dest_lga,
+                "dest_name":       dname,
+                "dest_state":      dstate,
+                "tonnes":          _t,
+                "cost_per_tonne":  totals.get("cost_per_tonne", 0),
+                "transport_cost":  totals.get("total_transport_costs", 0),
+                "freight_value":   totals.get("total_freight_value", 0),
+                "co2":             totals.get("total_co2_t", 0),
+                "trips":           _tr,
+                "avg_distance":    totals.get("avg_trip_distance_km", 0),
+                "tonnes_per_trip": _t / _tr if _tr else 0.0,
+                "trips_per_tonne": _tr / _t if _t else 0.0,
             })
 
 if not rows:
@@ -1878,6 +1931,24 @@ sorted by **{rank_metric}**.
     st.divider()
 
 # ---------------------------------------------------------------------------
+# Distance filter + intra-state filter
+# ---------------------------------------------------------------------------
+
+if min_distance_km > 0:
+    rows = [r for r in rows if r.get("avg_distance", 0) >= min_distance_km]
+
+if intra_state_only:
+    rows = [r for r in rows if r.get("orig_state") == r.get("dest_state")]
+
+if not rows:
+    st.info(
+        "No corridors match the current filters (distance and/or intra-state). "
+        "Adjust the **Min. Trip Distance** or uncheck **Intra-state only** in the sidebar.",
+        icon="\u2139\ufe0f",
+    )
+    st.stop()
+
+# ---------------------------------------------------------------------------
 # Sort + rank
 # ---------------------------------------------------------------------------
 
@@ -1958,6 +2029,12 @@ Values update when you apply **State**, **Industry Group**, or **Commodity** fil
     elif rank_field == "trips":
         _b1_label = "Median Trips"
         _b1_val   = f"{df['trips'].median():,.0f}"
+    elif rank_field == "tonnes_per_trip":
+        _b1_label = "Median Tonnes/Trip"
+        _b1_val   = f"{df['tonnes_per_trip'].median():,.2f} t/trip"
+    elif rank_field == "trips_per_tonne":
+        _b1_label = "Median Trips/Tonne"
+        _b1_val   = f"{df['trips_per_tonne'].median():,.4f}"
     else:  # transport_cost
         _b1_label = "Median Transport Cost"
         _b1_val   = f"${df['transport_cost'].median():,.0f}"
@@ -2080,7 +2157,7 @@ Both charts respond to the **Rank By** selector and any active commodity or indu
 
     b3_col1, b3_col2 = st.columns(2)
 
-    # ── Helper: aggregate by rank_field, handling cost_per_tonne as a ratio ──
+    # ── Helper: aggregate by rank_field, handling ratio fields correctly ──
     def _b3_agg(group_cols: list[str], val_col: str) -> tuple:
         """Return (df_top10, list_of_values) aggregated by rank_field."""
         if rank_field == "cost_per_tonne":
@@ -2090,6 +2167,18 @@ Both charts respond to the **Rank By** selector and any active commodity or indu
                 .reset_index()
             )
             _agg["_rank_val"] = _agg["_tc"] / _agg["_t"].replace(0, float("nan"))
+            _top = _agg.nlargest(10, "_rank_val")
+            return _top, _top["_rank_val"].tolist()
+        elif rank_field in ("tonnes_per_trip", "trips_per_tonne"):
+            _agg = (
+                df.groupby(group_cols)
+                .agg(_t=("tonnes", "sum"), _tr=("trips", "sum"))
+                .reset_index()
+            )
+            if rank_field == "tonnes_per_trip":
+                _agg["_rank_val"] = _agg["_t"] / _agg["_tr"].replace(0, float("nan"))
+            else:
+                _agg["_rank_val"] = _agg["_tr"] / _agg["_t"].replace(0, float("nan"))
             _top = _agg.nlargest(10, "_rank_val")
             return _top, _top["_rank_val"].tolist()
         else:
@@ -2471,12 +2560,14 @@ if is_national:
         "Rank", "orig_name", "orig_state", "dest_name", "dest_state",
         "tonnes", "cost_per_tonne", "transport_cost",
         "freight_value", "co2", "avg_distance", "trips",
+        "tonnes_per_trip", "trips_per_tonne",
     ]].rename(columns={
         "orig_name": "Origin", "orig_state": "Orig State",
         "dest_name": "Destination", "dest_state": "Dest State",
         "tonnes": "Tonnes", "cost_per_tonne": "Cost/Tonne ($)",
         "transport_cost": "Transport Cost ($)", "freight_value": "Freight Value ($)",
         "co2": "CO\u2082 (t)", "avg_distance": "Avg Distance (km)", "trips": "Trips",
+        "tonnes_per_trip": "Tonnes/Trip", "trips_per_tonne": "Trips/Tonne",
     })
     col_config = {
         "Rank":               st.column_config.NumberColumn(format="%d",   width="small"),
@@ -2491,6 +2582,8 @@ if is_national:
         "CO\u2082 (t)":       st.column_config.NumberColumn(format="%.1f"),
         "Avg Distance (km)":  st.column_config.NumberColumn(format="%.1f"),
         "Trips":              st.column_config.NumberColumn(format="%d",   width="small"),
+        "Tonnes/Trip":        st.column_config.NumberColumn(format="%.2f"),
+        "Trips/Tonne":        st.column_config.NumberColumn(format="%.4f"),
     }
     csv_name = f"l3_rankings_national_by_{rank_field}{_filter_suffix}.csv"
 else:
@@ -2507,11 +2600,13 @@ else:
         "Rank", "dest_name", "dest_state",
         "tonnes", "cost_per_tonne", "transport_cost",
         "freight_value", "co2", "avg_distance", "trips",
+        "tonnes_per_trip", "trips_per_tonne",
     ]].rename(columns={
         "dest_name": "Destination", "dest_state": "State",
         "tonnes": "Tonnes", "cost_per_tonne": "Cost/Tonne ($)",
         "transport_cost": "Transport Cost ($)", "freight_value": "Freight Value ($)",
         "co2": "CO\u2082 (t)", "avg_distance": "Avg Distance (km)", "trips": "Trips",
+        "tonnes_per_trip": "Tonnes/Trip", "trips_per_tonne": "Trips/Tonne",
     })
     col_config = {
         "Rank":               st.column_config.NumberColumn(format="%d",   width="small"),
@@ -2524,6 +2619,8 @@ else:
         "CO\u2082 (t)":       st.column_config.NumberColumn(format="%.1f"),
         "Avg Distance (km)":  st.column_config.NumberColumn(format="%.1f"),
         "Trips":              st.column_config.NumberColumn(format="%d",   width="small"),
+        "Tonnes/Trip":        st.column_config.NumberColumn(format="%.2f"),
+        "Trips/Tonne":        st.column_config.NumberColumn(format="%.4f"),
     }
     csv_name = f"l3_rankings_{orig_code}_by_{rank_field}{_filter_suffix}.csv"
 
@@ -2603,7 +2700,9 @@ Coloured by industry group. Responds to Rank By and Origin State filter.
             _ind_agg[_ind]["co2"]            += _r["co2"]
             _ind_agg[_ind]["trips"]          += _r["trips"]
         for _v in _ind_agg.values():
-            _v["cost_per_tonne"] = _v["transport_cost"] / _v["tonnes"] if _v["tonnes"] else 0.0
+            _v["cost_per_tonne"]  = _v["transport_cost"] / _v["tonnes"] if _v["tonnes"] else 0.0
+            _v["tonnes_per_trip"] = _v["tonnes"] / _v["trips"] if _v["trips"] else 0.0
+            _v["trips_per_tonne"] = _v["trips"] / _v["tonnes"] if _v["tonnes"] else 0.0
 
         _ind_sorted = sorted(_ind_agg.items(), key=lambda x: x[1][rank_field], reverse=True)
         _ind_labels = [k.replace("_", " ").title() for k, _ in _ind_sorted]
