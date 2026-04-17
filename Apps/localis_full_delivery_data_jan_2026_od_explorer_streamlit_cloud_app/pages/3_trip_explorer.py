@@ -36,7 +36,7 @@ EXPORT_PATH  = Path(tempfile.gettempdir()) / "filtered_export.csv"
 # Copy the ID from: https://drive.google.com/file/d/FILE_ID_HERE/view
 GDRIVE_CSV_FILE_ID = "1RsGks2qXD_pYPikChEmEalq42kvUMTV3"
 
-LARGE_FILE_THRESHOLD    = 1000 * 1024 * 1024   # 500 MB
+LARGE_FILE_THRESHOLD    = 500 * 1024 * 1024   # 500 MB
 SAMPLE_ROWS             = 500_000
 DOWNLOAD_SIZE_THRESHOLD = 150 * 1024 * 1024   # 150 MB
 
@@ -132,7 +132,12 @@ if data_source == "CSV" and not data_path.exists():
             "Set `GDRIVE_CSV_FILE_ID` at the top of this file."
         )
         st.stop()
-    resolved_path = ensure_gdrive_file("trips_jan_2026.csv", GDRIVE_CSV_FILE_ID, OUTPUT_DIR)
+        
+    # FIX 1: Ensure the output directory exists to prevent Streamlit Cloud crashes
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    
+    with st.spinner("Downloading data from Google Drive..."):
+        resolved_path = ensure_gdrive_file("trips_jan_2026.csv", GDRIVE_CSV_FILE_ID, OUTPUT_DIR)
 elif data_source == "Parquet" and not data_path.exists():
     st.error(f"File not found: `{data_path}`\n\nAdd trips.parquet to the `output/` folder.")
     st.stop()
@@ -143,7 +148,8 @@ else:
 # Load data
 # ---------------------------------------------------------------------------
 _file_size = resolved_path.stat().st_size
-_size_str  = f"{_file_size / 1e9:.1f} GB"
+_size_str  = f"{_file_size / 1e9:.1f} GB" if _file_size >= 1e9 else f"{_file_size / 1e6:.1f} MB"
+
 with st.spinner(f"Sampling {SAMPLE_ROWS:,} rows from {_size_str} {data_source} file…"):
     df_full = load_csv(resolved_path, SAMPLE_ROWS) if data_source == "CSV" else load_parquet(resolved_path, SAMPLE_ROWS)
 
@@ -208,7 +214,8 @@ with st.sidebar:
 # ---------------------------------------------------------------------------
 # Apply filters
 # ---------------------------------------------------------------------------
-df = df_full.copy()
+# FIX 2: Do not use df_full.copy() here to avoid doubling memory consumption
+df = df_full
 
 if origin_sel:
     df = df[df["origin_lga_name"].isin(origin_sel)]
@@ -468,26 +475,62 @@ for _k in ("export_path", "export_rows", "export_csv_bytes", "export_csv_name"):
 
 if st.button("⚙️ Prepare full export", use_container_width=True):
     with st.spinner(f"Reading full {data_source} file and applying filters — may take a few minutes…"):
-        _df_full_exp = (
-            load_csv(resolved_path, nrows=None)
-            if data_source == "CSV"
-            else load_parquet(resolved_path, nrows=None)
-        )
-        _df_exp = _df_full_exp.copy()
-        if origin_sel:
-            _df_exp = _df_exp[_df_exp["origin_lga_name"].isin(origin_sel)]
-        if dest_sel:
-            _df_exp = _df_exp[_df_exp["destination_lga_name"].isin(dest_sel)]
-        _df_exp = _df_exp[(_df_exp["date"] >= date_start) & (_df_exp["date"] <= date_end)]
-        _export_cols = [c for c in COLUMN_ORDER if c in _df_exp.columns]
-        _df_exp[_export_cols].to_csv(EXPORT_PATH, index=False)
+        
+        export_rows = 0
+        first_chunk = True
+        
+        # FIX 3: Process the data in chunks so Streamlit Cloud RAM doesn't crash on export
+        if data_source == "CSV":
+            chunk_iter = pd.read_csv(resolved_path, chunksize=100_000)
+            for chunk in chunk_iter:
+                _df_exp = _fix_date(chunk)
+                
+                if origin_sel:
+                    _df_exp = _df_exp[_df_exp["origin_lga_name"].isin(origin_sel)]
+                if dest_sel:
+                    _df_exp = _df_exp[_df_exp["destination_lga_name"].isin(dest_sel)]
+                _df_exp = _df_exp[(_df_exp["date"] >= date_start) & (_df_exp["date"] <= date_end)]
+                
+                _export_cols = [c for c in COLUMN_ORDER if c in _df_exp.columns]
+                _df_exp[_export_cols].to_csv(
+                    EXPORT_PATH, 
+                    mode='w' if first_chunk else 'a', 
+                    header=first_chunk, 
+                    index=False
+                )
+                export_rows += len(_df_exp)
+                first_chunk = False
+        else:
+            # Parquet Chunking fallback
+            import pyarrow.parquet as pq
+            pf = pq.ParquetFile(resolved_path)
+            for batch in pf.iter_batches(batch_size=100_000):
+                _df_exp = _fix_date(batch.to_pandas())
+                
+                if origin_sel:
+                    _df_exp = _df_exp[_df_exp["origin_lga_name"].isin(origin_sel)]
+                if dest_sel:
+                    _df_exp = _df_exp[_df_exp["destination_lga_name"].isin(dest_sel)]
+                _df_exp = _df_exp[(_df_exp["date"] >= date_start) & (_df_exp["date"] <= date_end)]
+                
+                _export_cols = [c for c in COLUMN_ORDER if c in _df_exp.columns]
+                _df_exp[_export_cols].to_csv(
+                    EXPORT_PATH, 
+                    mode='w' if first_chunk else 'a', 
+                    header=first_chunk, 
+                    index=False
+                )
+                export_rows += len(_df_exp)
+                first_chunk = False
+                
         _exp_size = EXPORT_PATH.stat().st_size
         st.session_state.export_path      = str(EXPORT_PATH)
-        st.session_state.export_rows      = len(_df_exp)
+        st.session_state.export_rows      = export_rows
         st.session_state.export_csv_name  = csv_filename
         st.session_state.export_csv_bytes = (
             EXPORT_PATH.read_bytes() if _exp_size < DOWNLOAD_SIZE_THRESHOLD else None
         )
+        st.rerun()
 
 if st.session_state.export_path:
     st.success(f"✅ {st.session_state.export_rows:,} rows saved → `{st.session_state.export_path}`")
@@ -499,8 +542,8 @@ if st.session_state.export_path:
             mime="text/csv",
         )
     else:
-        _exp_mb = EXPORT_PATH.stat().st_size / 1e6
+        _exp_mb = Path(st.session_state.export_path).stat().st_size / 1e6
         st.info(
             f"File is {_exp_mb:.0f} MB — too large for the browser.\n\n"
-            f"Copy from server:  `scp ubuntu@<ip>:{EXPORT_PATH} .`"
+            f"Copy from server:  `scp ubuntu@<ip>:{st.session_state.export_path} .`"
         )
